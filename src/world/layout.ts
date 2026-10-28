@@ -89,6 +89,12 @@ export const GUN_GALLERIES = {
 
 /** Library: east end of Park Avenue, beside D-Block. Door gap in its north wall. */
 export const LIBRARY = { box: [0.5, 14.4, 15.0, 24.15] as [number, number, number, number], door: [4.0, 6.0] as [number, number] };
+/**
+ * The narrow gap between D-Block's east end and the library is closed by a wall with a locked steel
+ * door, so Park Avenue cannot see down Sunset Strip. The two aisles still connect through the
+ * passage at D-Block's west end and through the library's north and west doors. Box [x0, z0, x1, z1].
+ */
+export const D_GAP_WALL = [-1.6, 15.45, 0.5, 15.75] as [number, number, number, number];
 /** Clock over the dining hall door (west wall, on Broadway's axis) */
 export const DINING_DOOR: V3 = [-32.05, FLOOR, 0.45];
 export const CLOCK: V3 = [-31.9, FLOOR + 3.6, 0.45];
@@ -311,11 +317,16 @@ export const GUARDS: GuardDef[] = [
     route: [[-28.5, F, 0.4], [-6, F, 0.4], [14, F, 0.4], [29, F, 0.4], [14, F, 0.6], [-6, F, 0.6]] },
   { name: 'Block officer', area: 'cellhouse', flashlight: true, minAlarm: 0, pause: 2, counts: true,
     route: [[-28.5, F, -11.1], [0, F, -11.1], [28.8, F, -11.1], [28.8, F, 12.0], [0, F, 12.0], [-28.5, F, 12.0]] },
-  { name: 'West gallery officer', area: 'gallery', flashlight: false, minAlarm: 0, pause: 5,
+  // The galleries were rarely manned at night (docs/RESEARCH.md): the officer only takes his post
+  // once the alarm has been raised.
+  { name: 'West gallery officer', area: 'gallery', flashlight: false, minAlarm: 1, pause: 5,
     route: [[-31.15, F + 2.5, -12.5], [-31.15, F + 2.5, 5], [-31.15, F + 2.5, 22.5], [-31.15, F + 2.5, 5]] },
-  // Walks Sunset Strip and Park Avenue, crossing through the gap between D-Block's east end and the library.
+  // Walks Sunset Strip and the west half of Park Avenue, linked by the open passage at D-Block's west
+  // end (the gap at its east end is walled off - see D_GAP_WALL).
   { name: 'D-Block officer', area: 'cellhouse', flashlight: true, minAlarm: 1, pause: 3, entry: [31.0, F, 0.4], // through the cutoff gate
-    route: [[-29, F, 20.5], [-0.6, F, 20.5], [-0.6, F, 12.2], [-24, F, 12.2], [-0.6, F, 12.2], [-0.6, F, 20.5]] },
+    // (the Sunset Strip turn at x=-6 keeps (-8, 12) the waypoint nearest his entry, so he walks in
+    // along Park Avenue rather than cutting through the library)
+    route: [[-29, F, 20.5], [-6.0, F, 20.5], [-29, F, 20.5], [-28.9, F, 15.6], [-28.5, F, 12.0], [-8, F, 12.0], [-28.5, F, 12.0], [-28.9, F, 15.6]] },
   { name: 'North road patrol', area: 'outside', flashlight: true, minAlarm: 0, pause: 4,
     route: [[-100, 31.5, -34], [-128, 26, -30], [-160, 17, -36], [-188, 13, -46.5], [-160, 17, -36], [-128, 26, -30]] },
   { name: 'Shore patrol', area: 'outside', flashlight: true, minAlarm: 2, pause: 3, entry: [-150, 19, -34], // down the road
@@ -329,16 +340,17 @@ export const NAV_NODES: Record<string, V3> = {
   br_w: [-24, F, 0.4], br_m: [0, F, 0.4], br_e: [26.5, F, 0.4],
   pa_w: [-24, F, 12.0], pa_m: [0, F, 12.0], pa_e: [26.5, F, 12.0],
   ee_n: [29.0, F, -11.1], ee_b: [29.0, F, 0.4], ee_p: [29.0, F, 12.0],
-  ss_w: [-24, F, 20.5], ss_e: [-1, F, 20.5], dgap_n: [-0.6, F, 13.2], dgap_s: [-0.6, F, 18.2],
+  ss_w: [-24, F, 20.5], ss_e: [-1, F, 20.5], lib_w: [1.4, F, 19.1],
   lib_door: [5.0, F, 13.4], lib_in: [8.0, F, 18.5],
   ut_door: [-26.3, F, -5.55],
 };
 export const NAV_EDGES: [string, string][] = [
-  ['ts_n', 'ts_b'], ['ts_b', 'ts_p'], ['ts_p', 'ts_s'], ['ts_n', 'mi_w'], // ts_p-ts_s: open D-Block west-end passage ['ts_b', 'br_w'], ['ts_p', 'pa_w'], ['ts_s', 'ss_w'],
+  // ts_p-ts_s is the open passage at D-Block's west end
+  ['ts_n', 'ts_b'], ['ts_b', 'ts_p'], ['ts_p', 'ts_s'], ['ts_n', 'mi_w'], ['ts_b', 'br_w'], ['ts_p', 'pa_w'], ['ts_s', 'ss_w'],
   ['mi_w', 'mi_m'], ['mi_m', 'mi_e'], ['mi_e', 'ee_n'], ['br_w', 'br_m'], ['br_m', 'br_e'], ['br_e', 'ee_b'],
   ['pa_w', 'pa_m'], ['pa_m', 'pa_e'], ['pa_e', 'ee_p'], ['ee_n', 'ee_b'], ['ee_b', 'ee_p'], ['ss_w', 'ss_e'],
   ['pa_m', 'lib_door'], ['lib_door', 'lib_in'], ['ts_b', 'ut_door'], ['ts_n', 'ut_door'],
-  ['pa_m', 'dgap_n'], ['dgap_n', 'dgap_s'], ['dgap_s', 'ss_e'], ['ts_s', 'ss_w'],
+  ['ss_e', 'lib_w'], ['lib_w', 'lib_in'],
 ];
 
 // ------------------------------------------------------------------------------------------------

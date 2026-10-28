@@ -5,11 +5,11 @@
 //   MapView   - the M overlay: the whole island north-up on survey paper + a cellhouse plan inset
 // Path2D geometry lives in world metres (x, z); a View maps it to the canvas.
 import * as THREE from 'three/webgpu';
-import { asset } from '../config';
+import { asset, TUNING } from '../config';
 import type { Ctx } from '../game/context';
-import type { V3 } from '../game/types';
+import type { GuardMode, V3 } from '../game/types';
 import { t } from '../i18n';
-import {
+import { D_GAP_WALL, GUARDS,
   AISLES, BLOCKS, CELLHOUSE_POLY, FENCE, FLOOR, GUN_GALLERIES, HOLE_CELLS, LAUNCH, LIBRARY, PLAYER_CELLS,
   ROOF, SEARCHLIGHTS, SERVICE_YARD, BAKERY_PIPE, UTILITY_B,
 } from '../world/layout';
@@ -125,9 +125,12 @@ export async function loadMapData(): Promise<MapData> {
   poly(cellhouse, CELLHOUSE_POLY, true);
   const blocks = new Path2D(), utility = new Path2D(), cellLines = new Path2D();
   for (const b of BLOCKS) {
-    blocks.rect(b.x0, b.zNorth, b.x1 - b.x0, b.zSouth - b.zNorth);
+    // D-Block's two westmost flats cells were never built: that end is an open floor passage
+    const first = b.id === 'D' ? 2 : 0;
+    const bx0 = b.id === 'D' ? b.cellX0 + first * b.pitch : b.x0;
+    blocks.rect(bx0, b.zNorth, b.x1 - bx0, b.zSouth - b.zNorth);
     if (b.utility) utility.rect(b.x0, b.utility[0], b.x1 - b.x0, b.utility[1] - b.utility[0]);
-    for (let i = 0; i <= b.cellsPerFace; i++) {
+    for (let i = first; i <= b.cellsPerFace; i++) {
       const x = b.cellX0 + i * b.pitch;
       if (b.utility) {
         cellLines.moveTo(x, b.zNorth); cellLines.lineTo(x, b.utility[0]);
@@ -145,6 +148,9 @@ export async function loadMapData(): Promise<MapData> {
   const library = new Path2D();
   const lb = LIBRARY.box;
   library.rect(lb[0], lb[1], lb[2] - lb[0], lb[3] - lb[1]);
+  // the walled-off gap between D-Block's east end and the library
+  const [gx0, gz0, gx1, gz1] = D_GAP_WALL;
+  blocks.rect(gx0, gz0, gx1 - gx0, gz1 - gz0);
 
   // north-up fit of the coastline
   const c = Math.cos(northRot), s = Math.sin(northRot);
@@ -467,6 +473,12 @@ export class CornerMap {
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const rim = R - 7;
+    // nearby guards: sight cone + facing arrow, coloured by how alert they are
+    if (ctx.guardRadar) {
+      this.gMe = p.position;
+      this.gR = R;
+      ctx.guardRadar.forEachVisible(this.drawGuard);
+    }
     // crew
     for (const m of crew) {
       if (m.isMe) continue;
@@ -493,7 +505,41 @@ export class CornerMap {
     const nx = c * d.north[0] - s * d.north[1], ny = s * d.north[0] + c * d.north[1];
     label(g, t('map.north'), R + nx * (R - 11), R + ny * (R - 11), 11, '#e8c25a', 'rgba(5,9,12,0.9)');
   }
+
+  private gMe: THREE.Vector3 = new THREE.Vector3();
+  private gR = 0;
+  /**
+   * One guard on the radar (GuardRadarApi callback, so it uses the pose rendered this frame). Drawn
+   * when his cone can reach the radar disc; cellhouse/gallery guards only when roughly on my level.
+   * The cone is his actual view: TUNING.guard.fov wide around body + head/torch aim, as long as his
+   * sight range, clipped by the radar circle; the arrow shows which way his body faces.
+   */
+  private readonly drawGuard = (i: number, gx: number, gy: number, gz: number, ry: number, viewYaw: number, mode: GuardMode, s: number) => {
+    const v = this.view, g = this.g, me = this.gMe;
+    const reach = TUNING.guard.range * v.s;
+    if (Math.hypot(gx - me.x, gz - me.z) * v.s > this.gR + reach * TUNING.guard.litMul) return;
+    if (GUARDS[i]?.area !== 'outside' && Math.abs(gy - me.y) > 5) return;
+    const x = v.sx(gx, gz), y = v.sy(gx, gz);
+    const alert = mode === 'chase' ? 2 : mode === 'suspicious' || mode === 'investigate' || s > 0.12 ? 1 : 0;
+    const col = GUARD_COLORS[alert];
+    const half = TUNING.guard.fov / 2;
+    const look = v.yawToScreen(viewYaw);
+    g.beginPath();
+    g.moveTo(x, y);
+    g.arc(x, y, reach, -Math.PI / 2 + look - half, -Math.PI / 2 + look + half);
+    g.closePath();
+    g.fillStyle = col.cone;
+    g.fill();
+    arrowGlyph(g, x, y, v.yawToScreen(ry), 5.5, col.body, 'rgba(0,0,0,0.85)');
+  };
 }
+
+/** calm / suspicious ("?") / chasing ("!") */
+const GUARD_COLORS = [
+  { body: '#d8cfb6', cone: 'rgba(216,207,182,0.24)' },
+  { body: '#e8a33a', cone: 'rgba(232,163,58,0.32)' },
+  { body: '#e2483f', cone: 'rgba(226,72,63,0.38)' },
+] as const;
 
 // ------------------------------------------------------------------------------------------------
 // Full map overlay (M)

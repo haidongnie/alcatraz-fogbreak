@@ -442,6 +442,14 @@ export class Guards {
     }
   }
 
+  /** GuardRadarApi: the poses rendered this frame (live on the host, interpolated on clients). */
+  forEachVisible(cb: (i: number, x: number, y: number, z: number, ry: number, viewYaw: number, mode: GuardMode, s: number) => void) {
+    for (let i = 0; i < this.states.length; i++) {
+      const st = this.states[i];
+      if (st.visible) cb(i, st.x, st.y, st.z, st.ry, st.ry + this.aims[i].yaw, st.mode, st.s);
+    }
+  }
+
   /** Clients don't receive the torch aim: point it at the watched player, else the shared idle sweep. */
   private clientAim(st: GuardViewState, t: number, index: number, aim: Aim) {
     if ((st.mode === 'suspicious' || st.mode === 'chase') && st.target && this.targetPos(st.target, this.tmp)) {

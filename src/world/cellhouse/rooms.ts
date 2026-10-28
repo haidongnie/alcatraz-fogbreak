@@ -4,7 +4,7 @@
 // the light fixtures (emissive only; the real lights are the atmosphere's pooled point lights).
 import * as THREE from 'three/webgpu';
 import {
-  BOOK_CART, CEILING, CLOCK, FLOOR, GUARD_DESK, GUN_GALLERIES, LIBRARY, LIGHT_ANCHORS, ROOF,
+  BOOK_CART, CEILING, CLOCK, D_GAP_WALL, FLOOR, GUARD_DESK, GUN_GALLERIES, LIBRARY, LIGHT_ANCHORS, ROOF,
 } from '../layout';
 import { rng } from './batch';
 import type { MatDef } from './materials';
@@ -88,6 +88,14 @@ function buildLibrary(kit: Kit) {
   wallPiece(x0, FLOOR, z0, d0, CEILING, z0 + t);
   wallPiece(d1, FLOOR, z0, xe, CEILING, z0 + t);
   wallPiece(d0, doorH, z0, d1, CEILING, z0 + t);
+  // the gap between D-Block's east end and the library: wall + a locked steel door (both faces)
+  {
+    const [gx0, gz0, gx1, gz1] = D_GAP_WALL;
+    wallPiece(gx0, FLOOR, gz0, gx1, CEILING, gz1);
+    const dc = (gx0 + gx1) / 2;
+    batch.boxMM(mats.darkSteel, dc - 0.5, FLOOR, gz0 - 0.04, dc + 0.5, FLOOR + 2.2, gz0);
+    batch.boxMM(mats.darkSteel, dc - 0.5, FLOOR, gz1, dc + 0.5, FLOOR + 2.2, gz1 + 0.04);
+  }
   // west wall (door to Sunset Strip / D-Block side)
   const [w0, w1] = LIB_WEST_DOOR;
   wallPiece(x0, FLOOR, z0, x0 + t, CEILING, w0);

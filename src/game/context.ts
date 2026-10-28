@@ -8,7 +8,7 @@ import type { Physics } from '../core/physics';
 import type { Quality } from '../config';
 import type { ClimbDef, TraverseDef } from '../world/layout';
 import type { Net } from './net';
-import type { ActorsNet, Fx, ItemId, PlayerNet, PrisonerAnim, V3, WorldState, ZoneId } from './types';
+import type { ActorsNet, Fx, GuardMode, ItemId, PlayerNet, PrisonerAnim, V3, WorldState, ZoneId } from './types';
 
 // ------------------------------------------------------------------------------------------------
 // Physics collision groups (Rapier: 16-bit membership << 16 | 16-bit filter).
@@ -147,6 +147,15 @@ export interface PlayerApi {
   snapshot(): PlayerNet;
 }
 
+/** Guards as currently rendered (host: live; clients: interpolated), for the HUD radar. */
+export interface GuardRadarApi {
+  /**
+   * Calls back for every visible guard: index into GUARDS, feet position, body yaw, view yaw (body +
+   * head/torch aim, i.e. what his sight cone is centred on), mode and suspicion 0..1.
+   */
+  forEachVisible(cb: (i: number, x: number, y: number, z: number, ry: number, viewYaw: number, mode: GuardMode, s: number) => void): void;
+}
+
 /** Visual + networked carried items (src/game/interact/Items.ts). */
 export interface ItemsApi {
   /** world position where an item would land if dropped/thrown now by the local player */
@@ -183,6 +192,7 @@ export interface Ctx {
   lighting: LightingApi;
   player: PlayerApi | null;
   items: ItemsApi | null;
+  guardRadar: GuardRadarApi | null;
   /** Object3Ds that remote avatars are attached to, by player id (for item visuals, name tags) */
   avatars: Map<string, AvatarApi>;
 }

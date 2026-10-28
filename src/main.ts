@@ -68,7 +68,7 @@ const ctx: Ctx = {
   world: () => session?.getWorld() ?? null,
   actors: () => session?.getActors() ?? null,
   models: null!, terrain: null!, lighting: null!,
-  player: null, items: null, avatars: new Map(),
+  player: null, items: null, guardRadar: null, avatars: new Map(),
 };
 
 /**
@@ -154,6 +154,7 @@ const guards = new Guards(ctx, {
   onCatch: (pid, gi) => session!.catchPlayer(pid, gi),
   onSpotted: () => session!.spotted(),
 });
+ctx.guardRadar = guards;
 ctx.lighting = {
   exposure: (p) => Math.max(atmosphere.lampExposure(p), searchlights.exposure(p), guards.exposure(p)),
 };

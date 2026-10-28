@@ -38,7 +38,7 @@ side, four adjacent cells). Guards are Bureau of Prisons correctional officers (
    climb the pipes to the hidden workshop on top of B-Block.
 3. **钻头 The Drill** — the drill was stashed in the library book cart after a cell shake-down.
    Pick the utility-corridor door, sneak across the cellhouse floor (Broadway → Times Square →
-   library) past the patrols and the gun-gallery officer, and bring it back. (Optional: lift the
+   library) past the patrols (the west gun gallery is only manned once the alarm is raised), and bring it back. (Optional: lift the
    key ring from the guard desk to free a captured friend from D-Block isolation.)
 4. **屋顶 The Roof** — drill out the rivets on the roof ventilator bars (hold, very noisy), climb
    onto the roof. Carry the raft gear (3 bundles: rolled raft, paddles & life vests, concertina)
