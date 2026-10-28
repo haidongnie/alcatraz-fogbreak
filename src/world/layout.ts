@@ -171,6 +171,41 @@ export const FENCE = { x0: -94.0, x1: -62.0, z: -26.0, height: 3.7, climbIn: [-7
 /** Launch site: north-east shore in the lee of the power house (searchlight blind spot). */
 export const LAUNCH = { p: [-214.0, 1.2, -50.0] as V3, radius: 7.0, raftSpawn: [-219.0, 0.1, -63.0] as V3, raftRy: 0.55, seaDir: [-0.15, 0, -0.99] as V3 };
 
+/**
+ * The walk from the fence (FENCE.climbOut) down to the launch beach: between the double fence and the
+ * north retaining wall, round the wall's west end, past the water tower, down the north road past the
+ * Quartermaster warehouse and the ramp onto the shingle, then out to the raft. The exterior keeps it
+ * clear of walls/props and the HUD marker follows it. Points are [x, z].
+ */
+export const ESCAPE_PATH: [number, number][] = [
+  [FENCE.climbOut[0], -29.5], [-96, -29.4], [-116, -24.2], [-127, -19.5], [-134, -21], [-132, -29],
+  [-160, -36.4], [-185, -46.2], [-196, -51.5], [-206, -53.2], [LAUNCH.p[0], LAUNCH.p[2]],
+  [LAUNCH.raftSpawn[0], LAUNCH.raftSpawn[2]],
+];
+
+/** Point `ahead` metres further along ESCAPE_PATH from the path point closest to (x, z). */
+export function escapePathAhead(x: number, z: number, ahead: number): [number, number] {
+  const P = ESCAPE_PATH;
+  let best = Infinity, seg = 0, segT = 0;
+  for (let i = 0; i < P.length - 1; i++) {
+    const [ax, az] = P[i], [bx, bz] = P[i + 1];
+    const vx = bx - ax, vz = bz - az, len2 = vx * vx + vz * vz || 1;
+    const t = Math.max(0, Math.min(1, ((x - ax) * vx + (z - az) * vz) / len2));
+    const d = Math.hypot(ax + vx * t - x, az + vz * t - z);
+    if (d < best) { best = d; seg = i; segT = t; }
+  }
+  let left = ahead;
+  let [cx, cz] = [P[seg][0] + (P[seg + 1][0] - P[seg][0]) * segT, P[seg][1] + (P[seg + 1][1] - P[seg][1]) * segT];
+  for (let i = seg; i < P.length - 1; i++) {
+    const [nx, nz] = P[i + 1];
+    const d = Math.hypot(nx - cx, nz - cz);
+    if (d >= left) return [cx + (nx - cx) * (left / d), cz + (nz - cz) * (left / d)];
+    left -= d;
+    [cx, cz] = [nx, nz];
+  }
+  return [cx, cz];
+}
+
 /** Where items start. Bundles start in the workshop on top of B-Block. */
 export const ITEM_SPAWNS: Record<ItemId, V3> = {
   drill: [11.2, FLOOR + 0.62, 20.4],              // library book cart
@@ -267,6 +302,8 @@ export interface GuardDef {
   minAlarm: number;
   /** this officer walks the B-Block flats during counts */
   counts?: boolean;
+  /** where a reinforcement (minAlarm > 0) appears before walking to its beat (never on top of players) */
+  entry?: V3;
 }
 const F = FLOOR;
 export const GUARDS: GuardDef[] = [
@@ -277,11 +314,11 @@ export const GUARDS: GuardDef[] = [
   { name: 'West gallery officer', area: 'gallery', flashlight: false, minAlarm: 0, pause: 5,
     route: [[-31.15, F + 2.5, -12.5], [-31.15, F + 2.5, 5], [-31.15, F + 2.5, 22.5], [-31.15, F + 2.5, 5]] },
   // Walks Sunset Strip and Park Avenue, crossing through the gap between D-Block's east end and the library.
-  { name: 'D-Block officer', area: 'cellhouse', flashlight: true, minAlarm: 1, pause: 3,
+  { name: 'D-Block officer', area: 'cellhouse', flashlight: true, minAlarm: 1, pause: 3, entry: [31.0, F, 0.4], // through the cutoff gate
     route: [[-29, F, 20.5], [-0.6, F, 20.5], [-0.6, F, 12.2], [-24, F, 12.2], [-0.6, F, 12.2], [-0.6, F, 20.5]] },
   { name: 'North road patrol', area: 'outside', flashlight: true, minAlarm: 0, pause: 4,
     route: [[-100, 31.5, -34], [-128, 26, -30], [-160, 17, -36], [-188, 13, -46.5], [-160, 17, -36], [-128, 26, -30]] },
-  { name: 'Shore patrol', area: 'outside', flashlight: true, minAlarm: 2, pause: 3,
+  { name: 'Shore patrol', area: 'outside', flashlight: true, minAlarm: 2, pause: 3, entry: [-150, 19, -34], // down the road
     route: [[-196, 10, -46], [-226, 3, -44], [-236, 3, -30], [-226, 3, -44]] },
 ];
 
@@ -336,7 +373,7 @@ export const LIGHT_ANCHORS: LightAnchor[] = [
   ...[-24, -12, 0, 12, 24].map((x): LightAnchor => ({ p: [x, CEILING - 0.6, 0.45], color: 0xcfe3ff, intensity: 18, distance: 16 })),
   ...[-24, 0, 24].map((x): LightAnchor => ({ p: [x, CEILING - 0.6, -11.1], color: 0xcfe3ff, intensity: 10, distance: 13 })),
   ...[-24, 0, 24].map((x): LightAnchor => ({ p: [x, CEILING - 0.6, 12.0], color: 0xcfe3ff, intensity: 10, distance: 13 })),
-  { p: [-29, F + 4.5, 0.45], color: 0xffe2b0, intensity: 14, distance: 14 },   // Times Square
+  { p: [-29, F + 4.5, 0.45], color: 0xffe2b0, intensity: 6, distance: 10 },    // Times Square (night light)
   { p: [8, F + 3.0, 19.5], color: 0xffd9a0, intensity: 8, distance: 10 },       // library desk lamp
   { p: [29.8, F + 2.2, 0.4], color: 0xffd9a0, intensity: 8, distance: 9 },      // guard desk
   { p: [-16.6, CEILING - 0.45, -7.3], color: 0xffbf73, intensity: 6, distance: 9 }, // workshop work lamp (top of B)

@@ -123,6 +123,8 @@ export class Hud {
   private H = innerHeight;
   private readonly v = new THREE.Vector3();
 
+  private readonly fromTmp: V3 = [0, 0, 0];
+
   constructor(parent: HTMLElement, private readonly ctx: Ctx) {
     // --- top left: objectives + crew
     this.objNum = new TextSlot(h('span', 'obj-num'));
@@ -270,7 +272,11 @@ export class Hud {
     else if (me.s === 'aboard') this.target = FOG_TARGET;
     else if (me.s !== 'free') this.target = null;
     else if (w.chapter === 'bay' && w.raft.launched) this.target = null;
-    else this.target = objectiveTarget(w, myId);
+    else {
+      const pl = this.ctx.player;
+      if (pl) { this.fromTmp[0] = pl.position.x; this.fromTmp[1] = pl.position.y; this.fromTmp[2] = pl.position.z; }
+      this.target = objectiveTarget(w, myId, pl ? this.fromTmp : undefined);
+    }
     const key = me?.s === 'aboard' ? 'hud.fogBank' : '';
     if (key !== this.targetKey) { this.targetKey = key; this.markerLabel.set(key ? t(key) : ''); }
   }

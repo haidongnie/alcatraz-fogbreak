@@ -118,8 +118,11 @@ export class Session {
 
   private becomeHost() {
     // Resume from the room state if it exists (host migration), else create a fresh world.
+    // An action may already have created a world before the first update ran (e.g. Start clicked
+    // during a throttled first frame) - keep it rather than resetting to a fresh briefing.
     const existing = this.net.getWorld();
-    this.world = existing ? structuredClone(existing) : createWorld();
+    if (existing) this.world = structuredClone(existing);
+    else this.world ??= createWorld();
     const a = this.net.getActors();
     if (a) { this.clock = Math.max(this.clock, a.t); this.actors = a; }
     if (!existing) this.dirty = true;

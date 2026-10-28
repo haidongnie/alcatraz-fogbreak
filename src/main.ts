@@ -197,7 +197,7 @@ bus.on('fx', (f) => {
 
 // Debug handle for testing from the console (?debug): window.fog.ctx / .session / .player()
 if (params.has('debug')) {
-  (window as unknown as { fog: unknown }).fog = { ctx, session, net, guards, raft, items, player: () => player, THREE };
+  (window as unknown as { fog: unknown }).fog = { ctx, session, net, guards, raft, items, interaction, remotes, rig, player: () => player, THREE };
 }
 
 // Solo games really pause while the pause menu is open (online, the night goes on).
@@ -207,14 +207,11 @@ bus.on('ui', (u) => { if (u === 'pause') paused = net.mode === 'offline'; if (u 
 // 7. Frame loop.
 started = true;
 let publishAccum = 0;
-renderer.setAnimationLoop(() => {
-  if (!canvas.clientWidth || !canvas.clientHeight) return;
-  timer.update();
-  const dt = Math.min(timer.getDelta(), 0.1);
+function frame(dt: number, render = true) {
   input.poll();
   if (paused) {
     ui.update(dt);
-    atmosphere.render();
+    if (render) atmosphere.render();
     input.endFrame();
     return;
   }
@@ -244,9 +241,20 @@ renderer.setAnimationLoop(() => {
     net.setMyState(player.snapshot());
   }
 
-  atmosphere.render();
+  if (render) atmosphere.render();
   input.endFrame();
+}
+renderer.setAnimationLoop(() => {
+  if (!canvas.clientWidth || !canvas.clientHeight) return;
+  timer.update();
+  frame(Math.min(timer.getDelta(), 0.1));
 });
+if (params.has('debug')) {
+  // Deterministic stepping for automated tests (works even when the page is not compositing).
+  (window as unknown as { fog: Record<string, unknown> }).fog.step = (n = 1, dt = 1 / 60) => {
+    for (let i = 0; i < n; i++) frame(dt, false);
+  };
+}
 
 new ResizeObserver(() => {
   const w = canvas.clientWidth, h = canvas.clientHeight;

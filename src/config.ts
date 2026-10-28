@@ -49,7 +49,7 @@ export const TUNING = {
     range: 18,
     crouchDarkMul: 0.45,
     litMul: 1.4,
-    suspicionRate: 1.0,
+    suspicionRate: 0.55,
     suspicionDecay: 0.35,
     walkSpeed: 1.45,
     runSpeed: 4.4,

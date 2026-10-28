@@ -1,7 +1,7 @@
 // island.json data contract, small 2D geometry helpers and the "keep clear" corridors that every
 // exterior builder respects (outdoor guard routes and the escape walk from the fence to the shore).
 // 2D points are [x, z] in the game frame (see src/world/layout.ts).
-import { FENCE, GUARDS, LAUNCH, SERVICE_YARD } from '../layout';
+import { ESCAPE_PATH, GUARDS, SERVICE_YARD } from '../layout';
 
 export type P2 = [number, number];
 
@@ -145,11 +145,7 @@ export interface Corridor { pts: P2[]; radius: number; closed: boolean; name: st
  * the north road and the ramp onto the shingle, then out to the raft spawn. Only used to keep the
  * way open (no gameplay meaning): walls get gaps, buildings are trimmed and props stay off it.
  */
-export const ESCAPE_PATH: P2[] = [
-  [FENCE.climbOut[0], -29.5], [-96, -29.4], [-116, -24.2], [-127, -19.5], [-134, -21], [-132, -29],
-  [-160, -36.4], [-185, -46.2], [-196, -51.5], [-206, -53.2], [LAUNCH.p[0], LAUNCH.p[2]],
-  [LAUNCH.raftSpawn[0], LAUNCH.raftSpawn[2]],
-];
+export { ESCAPE_PATH }; // defined in layout.ts (shared with the HUD marker)
 
 export const CORRIDORS: Corridor[] = [
   ...GUARDS.filter((g) => g.area === 'outside').map((g): Corridor => ({

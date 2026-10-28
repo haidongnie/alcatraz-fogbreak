@@ -14,7 +14,7 @@
 //   countOpen      1 while a count is in progress
 import { TUNING } from '../config';
 import {
-  HOLE_CELLS, ITEM_SPAWNS, LAUNCH, PLAYER_CELLS, ROOF_VENT, UTILITY_DOOR, WORKSHOP, zoneAt,
+  BAKERY_PIPE, FENCE, HOLE_CELLS, escapePathAhead, ITEM_SPAWNS, LAUNCH, PLAYER_CELLS, ROOF_VENT, UTILITY_DOOR, WORKSHOP, zoneAt,
 } from '../world/layout';
 import {
   BUNDLE_IDS, ITEM_IDS, type Action, type ChapterId, type Fx, type ItemId, type PlayerNet, type V3, type WorldState,
@@ -150,7 +150,7 @@ export function availableInteractions(w: WorldState, pid: string): Interaction[]
     for (const id of ITEM_IDS) {
       const it = w.items[id];
       if (it.by !== '') continue;
-      out.push({ id: `pickup:${id}`, p: it.p, radius: 1.4, hold: isHeavy(id) ? 1.0 : 0.5, noise: 0.05, prompt: `prompt.pickup.${id}` });
+      out.push({ id: `pickup:${id}`, p: it.p, radius: 1.8, hold: isHeavy(id) ? 1.0 : 0.5, noise: 0.05, prompt: `prompt.pickup.${id}` });
     }
   }
   if (w.raft.inflate < 1 && bundlesAtLaunch(w) === activeBundles(w).length && activeBundles(w).length > 0) {
@@ -216,7 +216,7 @@ export function hostApply(w: WorldState, a: Action, pid: string, t: number, io: 
     }
     case 'pickup': {
       const it = w.items[a.item];
-      if (me.s !== 'free' || it.by !== '' || carriedBy(w, pid) || !near(it.p, 1.4)) return false;
+      if (me.s !== 'free' || it.by !== '' || carriedBy(w, pid) || !near(it.p, 1.8)) return false;
       it.by = pid;
       io.fx({ k: 'sfx', id: 'pickup', p: it.p });
       return true;
@@ -401,7 +401,8 @@ export function hostTick(w: WorldState, t: number, io: HostIO, raftDist: number)
   // lose conditions
   if (w.alarm >= 3) return lose(w, t, 'lost.lockdown', io);
   const active = connected.map((pid) => w.players[pid]);
-  if (active.length > 0 && active.every((s) => s.s === 'hole')) return lose(w, t, 'lost.allCaught', io);
+  // A team wipe needs a team: solo, a catch costs time and an alarm level instead.
+  if (active.length > 1 && active.every((s) => s.s === 'hole')) return lose(w, t, 'lost.allCaught', io);
   return changed;
 }
 
@@ -468,8 +469,12 @@ export function objectives(w: WorldState, myId: string): { key: string; done: bo
   }
 }
 
-/** Reference positions used by the UI for objective markers (where to go next). */
-export function objectiveTarget(w: WorldState, myId: string): V3 | null {
+/**
+ * Reference positions used by the UI for objective markers (where to go next). With `from` (the
+ * player's position) the descent marker leads along the real route: hatch -> bakery pipe -> fence ->
+ * the escape path down to the shore, instead of pointing through walls at the launch site.
+ */
+export function objectiveTarget(w: WorldState, myId: string, from?: V3): V3 | null {
   const slot = w.players[myId]?.slot ?? 0;
   const f = w.flags;
   switch (w.chapter) {
@@ -482,8 +487,16 @@ export function objectiveTarget(w: WorldState, myId: string): V3 | null {
       return w.items.drill.by === '' ? w.items.drill.p : [-14.2, WORKSHOP.y, -4.0];
     case 'roof':
       return ROOF_VENT.below;
-    case 'descent':
-      return LAUNCH.p;
+    case 'descent': {
+      if (!from) return LAUNCH.p;
+      const z = zoneAt(from[0], from[1], from[2]);
+      if (z === 'workshop' || z === 'utility' || z === 'cell' || z === 'floor') return ROOF_VENT.below;
+      if (z === 'roof') return BAKERY_PIPE.roofStand;
+      if (z === 'yard') return FENCE.climbIn;
+      if (z === 'shore') return LAUNCH.p;
+      const [x, pz] = escapePathAhead(from[0], from[2], 14);
+      return [x, from[1] + 1, pz];
+    }
     case 'bay':
       return w.raft.p;
   }

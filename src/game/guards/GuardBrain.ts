@@ -116,6 +116,14 @@ export class GuardBrain {
     this.resetMind();
     this.mode = 'patrol';
     this.active = true;
+    // Reinforcements walk in from an entry point rather than materialising on their beat
+    // (which may be right next to the player who just raised the alarm).
+    const e = this.def.entry;
+    if (e) {
+      this.pos.set(e[0], e[1], e[2]);
+      this.ry = Math.atan2(-(r0.x - e[0]), -(r0.z - e[2]));
+      this.mode = 'return';
+    }
   }
 
   /** Continue from a replicated state (host migration). */

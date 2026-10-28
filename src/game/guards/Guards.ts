@@ -329,6 +329,7 @@ export class Guards {
     if (!inCone) rate *= 0.5;                       // felt rather than seen
     else if (off > g.fov * 0.3) rate *= 0.65;       // peripheral vision
     if (b.mode === 'suspicious' || b.mode === 'investigate' || b.mode === 'chase') rate *= 1.5; // already on edge
+    if (b.isGallery) rate *= 0.7; // looking down through the cage bars, in the dark
     return rate;
   }
 
