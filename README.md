@@ -55,6 +55,17 @@ npm run dev
 可选：在 https://dev.joinplayroom.com 创建项目，把 `gameId` 写入 `.env` 的 `VITE_PLAYROOM_GAME_ID=`
 （GitHub Actions 读取仓库变量 `PLAYROOM_GAME_ID`）。不设置也能玩，Playroom 只会在控制台给出警告。
 
+### 测试 / Testing
+
+```bash
+npm run test:rules   # headless test of the game rules: a full 2-player night, failures, leavers
+```
+
+In the browser, open the dev server with `?debug`, then in the console:
+`await import('/tests/harness.ts'); await T.solo(); await T.hold('KeyE', 2); T.where()` —
+`fog.step(n)` advances the game deterministically (works even when the tab is not visible).
+`?webgl` forces the WebGL2 fallback, `?q=low` the mobile quality tier.
+
 ### 重新生成模型 / Regenerating the Meshy assets
 
 ```bash
