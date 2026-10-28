@@ -1,0 +1,795 @@
+{
+  "prisoner_a": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-86e0-741e-8a87-236310816e4e",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18164-f01f-725a-b556-f2a0c8947c49",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/prisoner_a/model.glb",
+      "rigged": "assets-src/meshy/prisoner_a/rigged.glb",
+      "anim": "assets-src/meshy/prisoner_a/anim.glb"
+    },
+    "rig": {
+      "retries": 0,
+      "taskId": "01a18165-b1da-70c0-9940-44e1f09d50ec",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "anim": {
+      "retries": 0,
+      "taskId": "01a18166-5500-74b7-96d9-b27c84abc96c",
+      "status": "SUCCEEDED",
+      "credits": 30
+    },
+    "actionIds": [
+      0,
+      30,
+      16,
+      524,
+      438,
+      276,
+      569,
+      187,
+      363,
+      262
+    ],
+    "done": true
+  },
+  "prisoner_b": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-86fb-73e8-bf06-a20f50bbf85c",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18164-2ce3-7505-9d09-34124c777f01",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/prisoner_b/model.glb",
+      "rigged": "assets-src/meshy/prisoner_b/rigged.glb",
+      "anim": "assets-src/meshy/prisoner_b/anim.glb"
+    },
+    "rig": {
+      "retries": 0,
+      "taskId": "01a18164-f4a1-702b-b49e-6452f02d3caa",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "anim": {
+      "retries": 0,
+      "taskId": "01a18165-e5af-75c8-b62b-b6656688ab29",
+      "status": "SUCCEEDED",
+      "credits": 30
+    },
+    "actionIds": [
+      0,
+      30,
+      16,
+      524,
+      438,
+      276,
+      569,
+      187,
+      363,
+      262
+    ],
+    "done": true
+  },
+  "prisoner_c": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-869d-751b-b534-886b218512dd",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18164-3170-73cb-a2ba-40d6147b5ac5",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/prisoner_c/model.glb",
+      "rigged": "assets-src/meshy/prisoner_c/rigged.glb",
+      "anim": "assets-src/meshy/prisoner_c/anim.glb"
+    },
+    "rig": {
+      "retries": 0,
+      "taskId": "01a18165-29fb-77f2-8c40-fe016fe1c3ee",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "anim": {
+      "retries": 0,
+      "taskId": "01a18165-e92c-73ff-b052-73ef830d9b47",
+      "status": "SUCCEEDED",
+      "credits": 30
+    },
+    "actionIds": [
+      0,
+      30,
+      16,
+      524,
+      438,
+      276,
+      569,
+      187,
+      363,
+      262
+    ],
+    "done": true
+  },
+  "prisoner_d": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-86d6-77ae-b234-a4bc61d772be",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18164-1c64-7302-81cb-95a35667b771",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/prisoner_d/model.glb",
+      "rigged": "assets-src/meshy/prisoner_d/rigged.glb",
+      "anim": "assets-src/meshy/prisoner_d/anim.glb"
+    },
+    "rig": {
+      "retries": 0,
+      "taskId": "01a18165-0324-7031-93f9-2bc5a90c0b91",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "anim": {
+      "retries": 0,
+      "taskId": "01a18166-0917-710e-8550-59872f425927",
+      "status": "SUCCEEDED",
+      "credits": 30
+    },
+    "actionIds": [
+      0,
+      30,
+      16,
+      524,
+      438,
+      276,
+      569,
+      187,
+      363,
+      262
+    ],
+    "done": true
+  },
+  "guard": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-86fb-713c-929c-a16e6e09b690",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18164-20a6-71e9-892c-646a95b6a946",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/guard/model.glb",
+      "rigged": "assets-src/meshy/guard/rigged.glb",
+      "anim": "assets-src/meshy/guard/anim.glb"
+    },
+    "rig": {
+      "retries": 0,
+      "taskId": "01a18165-332c-71b1-af02-844bf82a3bbd",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "anim": {
+      "retries": 0,
+      "taskId": "01a18165-fbbe-7730-962e-69c37987705e",
+      "status": "SUCCEEDED",
+      "credits": 21
+    },
+    "actionIds": [
+      0,
+      30,
+      16,
+      337,
+      2,
+      389,
+      341
+    ],
+    "done": true
+  },
+  "cell_bunk": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-86d3-759f-a7f4-7b478daf8db9",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18164-017a-75f7-ba0e-c455e5817ce7",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/cell_bunk/model.glb"
+    },
+    "done": true
+  },
+  "cell_toilet": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-869e-7519-81d5-d596a7339f28",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18163-e5cd-77d0-aa5b-00854995b494",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/cell_toilet/model.glb"
+    },
+    "done": true
+  },
+  "cell_sink": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18163-8695-7082-8ed5-15e6e15c4efd",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18163-ff98-75c6-9466-e04b9e3cbb10",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/cell_sink/model.glb"
+    },
+    "done": true
+  },
+  "cell_table": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18164-bbe9-7630-ad3d-22770f8f6b5f",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18165-1ef1-7186-9e9c-3aae97d5a9ac",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/cell_table/model.glb"
+    },
+    "done": true
+  },
+  "dummy_head": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18164-c187-73b0-9455-37c738dc61e4",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18165-1893-70b4-85b1-e59f07511d6c",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/dummy_head/model.glb"
+    },
+    "done": true
+  },
+  "drill": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18164-d42d-76a7-98f7-31760902351b",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18165-2bfb-76aa-a744-8c153a14959a",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/drill/model.glb"
+    },
+    "done": true
+  },
+  "concertina": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18165-da56-7346-9f27-f0b9f44663b4",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18166-2f8e-73b1-a923-59bd13902305",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/concertina/model.glb"
+    },
+    "done": true
+  },
+  "raincoat_bundle": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18165-dbf8-75be-bd36-b4c13ef6d9c1",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18166-34fe-73b2-9b8d-6c27a6371218",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/raincoat_bundle/model.glb"
+    },
+    "done": true
+  },
+  "raft": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18166-0dd6-71bf-82b6-9f03f9926409",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18166-601f-7721-85d1-0e4d843e7349",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/raft/model.glb"
+    },
+    "done": true
+  },
+  "paddle": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18166-e004-7720-9eb9-ffd981482e09",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-3308-76b1-92f6-37417abe8d6a",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/paddle/model.glb"
+    },
+    "done": true
+  },
+  "life_vest": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18166-e940-7251-9414-3e6e0e03677c",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-41f6-7405-819e-f57551dc29e9",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/life_vest/model.glb"
+    },
+    "done": true
+  },
+  "key_ring": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-1c43-72d0-99a8-3db90435f2dc",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-70ad-7070-8712-25db5c655bab",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/key_ring/model.glb"
+    },
+    "done": true
+  },
+  "dining_table": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-28d5-762f-b691-713b7734509e",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-7d0c-7451-88bd-abc4795bfd31",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/dining_table/model.glb"
+    },
+    "done": true
+  },
+  "book_cart": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-4793-72f2-898f-3444e896d688",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-9c88-730c-9fee-9a620c1404fb",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/book_cart/model.glb"
+    },
+    "done": true
+  },
+  "guard_desk": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-8100-7377-9417-031dc32a0804",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-df69-727c-a784-d8023820c33d",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/guard_desk/model.glb"
+    },
+    "done": true
+  },
+  "wall_clock": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-8890-7370-bf28-ce371c8cf9e9",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-e1f6-76bd-80db-cfe99a1fdf63",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/wall_clock/model.glb"
+    },
+    "done": true
+  },
+  "mop_bucket": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-ab8d-7576-ba58-4aabeb016b49",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18167-fde8-7778-a7c0-c5cf492cb422",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/mop_bucket/model.glb"
+    },
+    "done": true
+  },
+  "metal_locker": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-c56c-7653-bd5d-6b7525598c62",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18168-39d2-7743-8994-f4dc6e5cecc2",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/metal_locker/model.glb"
+    },
+    "done": true
+  },
+  "lighthouse": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18167-f17a-759e-bcba-d57c0f073613",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18168-4c01-75ba-a8fd-5b3e262fd22b",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/lighthouse/model.glb"
+    },
+    "done": true
+  },
+  "water_tower": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18168-403b-73be-9c11-e2f0b1635d01",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18168-9f41-7243-9b3d-cfdf647ac066",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/water_tower/model.glb"
+    },
+    "done": true
+  },
+  "guard_tower": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18168-4784-73dc-ad21-b70cfa8235c2",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18168-bf7e-723f-a160-9b828b192c70",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/guard_tower/model.glb"
+    },
+    "done": true
+  },
+  "searchlight": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18168-bd31-76b9-b81f-69ad6c1f3474",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a1816a-4311-7052-9682-52fb4a52562a",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/searchlight/model.glb"
+    },
+    "done": true
+  },
+  "patrol_boat": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18168-cb53-70dc-9bb6-fae7ea3c3a7d",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18169-1fcc-7254-bb99-65c4996dc657",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/patrol_boat/model.glb"
+    },
+    "done": true
+  },
+  "crates": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18168-ced2-771a-ba60-3649a1e75570",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18169-44c1-76db-9e5b-d82385351a1c",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/crates/model.glb"
+    },
+    "done": true
+  },
+  "oil_drums": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18168-d39d-7329-a702-a79b98f56422",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18169-4d38-70bd-bf51-8c1c2cf78da6",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/oil_drums/model.glb"
+    },
+    "done": true
+  },
+  "shore_rocks": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18168-f540-75a9-a182-65a5431d3476",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18169-46dd-772d-b29b-00a7369575d4",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/shore_rocks/model.glb"
+    },
+    "done": true
+  },
+  "smokestack": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18169-0ea3-779e-81bc-ccac996c1d49",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18169-661f-7369-b9c3-12da99f14e7b",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/smokestack/model.glb"
+    },
+    "done": true
+  },
+  "street_lamp": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18169-5551-76a0-be70-5f4d5422bfa9",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18169-a6bb-76e0-b27a-e43beeab6f71",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/street_lamp/model.glb"
+    },
+    "done": true
+  },
+  "roof_ventilator": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18169-70dd-7061-b549-86cf8294660f",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a18169-c7dd-77c9-b53d-7a6d03fc2a76",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/roof_ventilator/model.glb"
+    },
+    "done": true
+  },
+  "pelican": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a18169-d285-750e-b694-e8b794f5ba11",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a1816a-2868-743e-b697-4f5d63e45ad6",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/pelican/model.glb"
+    },
+    "done": true
+  },
+  "warden_house": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a1816a-0906-7347-9ded-c477d59ee880",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a1816a-5ca7-7775-a790-574bddcc1bf3",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/warden_house/model.glb"
+    },
+    "done": true
+  },
+  "cypress_tree": {
+    "preview": {
+      "retries": 0,
+      "taskId": "01a1816a-163e-76bd-9600-a3a7a5bd0247",
+      "status": "SUCCEEDED",
+      "credits": 5
+    },
+    "refine": {
+      "retries": 0,
+      "taskId": "01a1816a-685d-77d5-a497-7e04f1c14079",
+      "status": "SUCCEEDED",
+      "credits": 10
+    },
+    "files": {
+      "model": "assets-src/meshy/cypress_tree/model.glb"
+    },
+    "done": true
+  }
+}

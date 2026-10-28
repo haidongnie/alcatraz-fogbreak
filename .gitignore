@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.*
+assets-src/meshy/**/raw*
+assets-src/meshy/**/*.glb
+assets-src/meshy/**/*.fbx
+.DS_Store
+public/draco
+public/basis
+*.log
