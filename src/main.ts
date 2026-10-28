@@ -90,7 +90,7 @@ const timer = new THREE.Timer();
 timer.connect(document);
 let started = false;
 renderer.setAnimationLoop(() => {
-  if (started) return;
+  if (started || !canvas.clientWidth || !canvas.clientHeight) return;
   timer.update();
   const dt = Math.min(timer.getDelta(), 0.1);
   titleCamera(dt);
@@ -189,10 +189,16 @@ bus.on('fx', (f) => {
   }
 });
 
+// Debug handle for testing from the console (?debug): window.fog.ctx / .session / .player()
+if (params.has('debug')) {
+  (window as unknown as { fog: unknown }).fog = { ctx, session, net, guards, raft, items, player: () => player, THREE };
+}
+
 // 7. Frame loop.
 started = true;
 let publishAccum = 0;
 renderer.setAnimationLoop(() => {
+  if (!canvas.clientWidth || !canvas.clientHeight) return;
   timer.update();
   const dt = Math.min(timer.getDelta(), 0.1);
   input.poll();

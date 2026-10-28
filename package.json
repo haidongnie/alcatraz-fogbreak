@@ -10,7 +10,8 @@
     "postinstall": "node scripts/copy-decoders.mjs",
     "meshy:generate": "node scripts/meshy/generate.mjs",
     "meshy:optimize": "node scripts/meshy/optimize.mjs",
-    "data:island": "node scripts/data/build-island.mjs"
+    "data:island": "node scripts/data/build-island.mjs",
+    "test:rules": "rolldown tests/rules.test.ts --file node_modules/.cache/rules.test.mjs --format esm --platform node --log-level warn && node node_modules/.cache/rules.test.mjs"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.20.0",

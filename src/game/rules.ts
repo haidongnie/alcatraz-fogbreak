@@ -207,6 +207,7 @@ export function hostApply(w: WorldState, a: Action, pid: string, t: number, io: 
       const before = w.raft.inflate;
       // each player inflates at 1/20 per second; amounts are clamped so a client cannot cheat
       w.raft.inflate = Math.min(1, w.raft.inflate + Math.max(0, Math.min(a.amount, 0.6)) / 20);
+      if (w.raft.inflate > 0.999) w.raft.inflate = 1; // float drift from many small steps
       if (before < 1 && w.raft.inflate >= 1) {
         io.fx({ k: 'toast', key: 'toast.inflated' });
         io.fx({ k: 'sfx', id: 'inflate', p: LAUNCH.p });
