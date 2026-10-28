@@ -204,7 +204,7 @@ export const CLIMBS: ClimbDef[] = [
   { id: 'utility_pipes', bottom: [UTILITY_CLIMB.x, FLOOR, -5.55], top: [UTILITY_CLIMB.x, BLOCK_TOP, -5.55],
     exitTop: [UTILITY_CLIMB.x, BLOCK_TOP, -4.0], exitBottom: [UTILITY_CLIMB.x + 0.8, FLOOR, -5.55], ry: Math.PI },
   { id: 'bakery_pipe', bottom: [BAKERY_PIPE.x, BAKERY_PIPE.bottom, -10.2], top: [BAKERY_PIPE.x, BAKERY_PIPE.top, -10.2],
-    exitTop: BAKERY_PIPE.roofStand, exitBottom: BAKERY_PIPE.groundStand, ry: 0, dropHeavyTo: [-78.4, 33.0, -11.2] },
+    exitTop: BAKERY_PIPE.roofStand, exitBottom: BAKERY_PIPE.groundStand, ry: Math.PI, dropHeavyTo: [-78.4, 33.0, -11.2] },
 ];
 
 export interface TraverseDef {
@@ -276,10 +276,11 @@ export const GUARDS: GuardDef[] = [
     route: [[-28.5, F, -11.1], [0, F, -11.1], [28.8, F, -11.1], [28.8, F, 12.0], [0, F, 12.0], [-28.5, F, 12.0]] },
   { name: 'West gallery officer', area: 'gallery', flashlight: false, minAlarm: 0, pause: 5,
     route: [[-31.15, F + 2.5, -12.5], [-31.15, F + 2.5, 5], [-31.15, F + 2.5, 22.5], [-31.15, F + 2.5, 5]] },
+  // Walks Sunset Strip and Park Avenue, crossing through the gap between D-Block's east end and the library.
   { name: 'D-Block officer', area: 'cellhouse', flashlight: true, minAlarm: 1, pause: 3,
-    route: [[-29, F, 20.5], [-1, F, 20.5], [8, F, 12.2], [-29, F, 12.2]] },
+    route: [[-29, F, 20.5], [-0.6, F, 20.5], [-0.6, F, 12.2], [-24, F, 12.2], [-0.6, F, 12.2], [-0.6, F, 20.5]] },
   { name: 'North road patrol', area: 'outside', flashlight: true, minAlarm: 0, pause: 4,
-    route: [[-100, 31.5, -34], [-128, 26, -30], [-160, 17, -36], [-188, 13, -44], [-160, 17, -36], [-128, 26, -30]] },
+    route: [[-100, 31.5, -34], [-128, 26, -30], [-160, 17, -36], [-188, 13, -46.5], [-160, 17, -36], [-128, 26, -30]] },
   { name: 'Shore patrol', area: 'outside', flashlight: true, minAlarm: 2, pause: 3,
     route: [[-196, 10, -46], [-226, 3, -44], [-236, 3, -30], [-226, 3, -44]] },
 ];
@@ -291,15 +292,16 @@ export const NAV_NODES: Record<string, V3> = {
   br_w: [-24, F, 0.4], br_m: [0, F, 0.4], br_e: [26.5, F, 0.4],
   pa_w: [-24, F, 12.0], pa_m: [0, F, 12.0], pa_e: [26.5, F, 12.0],
   ee_n: [29.0, F, -11.1], ee_b: [29.0, F, 0.4], ee_p: [29.0, F, 12.0],
-  ss_w: [-24, F, 20.5], ss_e: [-1, F, 20.5],
+  ss_w: [-24, F, 20.5], ss_e: [-1, F, 20.5], dgap_n: [-0.6, F, 13.2], dgap_s: [-0.6, F, 18.2],
   lib_door: [5.0, F, 13.4], lib_in: [8.0, F, 18.5],
   ut_door: [-26.3, F, -5.55],
 };
 export const NAV_EDGES: [string, string][] = [
-  ['ts_n', 'ts_b'], ['ts_b', 'ts_p'], ['ts_p', 'ts_s'], ['ts_n', 'mi_w'], ['ts_b', 'br_w'], ['ts_p', 'pa_w'], ['ts_s', 'ss_w'],
+  ['ts_n', 'ts_b'], ['ts_b', 'ts_p'], ['ts_p', 'ts_s'], ['ts_n', 'mi_w'], // ts_p-ts_s: open D-Block west-end passage ['ts_b', 'br_w'], ['ts_p', 'pa_w'], ['ts_s', 'ss_w'],
   ['mi_w', 'mi_m'], ['mi_m', 'mi_e'], ['mi_e', 'ee_n'], ['br_w', 'br_m'], ['br_m', 'br_e'], ['br_e', 'ee_b'],
   ['pa_w', 'pa_m'], ['pa_m', 'pa_e'], ['pa_e', 'ee_p'], ['ee_n', 'ee_b'], ['ee_b', 'ee_p'], ['ss_w', 'ss_e'],
   ['pa_m', 'lib_door'], ['lib_door', 'lib_in'], ['ts_b', 'ut_door'], ['ts_n', 'ut_door'],
+  ['pa_m', 'dgap_n'], ['dgap_n', 'dgap_s'], ['dgap_s', 'ss_e'], ['ts_s', 'ss_w'],
 ];
 
 // ------------------------------------------------------------------------------------------------
@@ -316,10 +318,11 @@ export interface SearchlightDef {
   range: number;
 }
 export const SEARCHLIGHTS: SearchlightDef[] = [
-  // Hill tower above the New Industries building: rakes the cellhouse roof and the north slope.
-  { name: 'Hill Tower', tower: [-112, 31, 22], height: 11, yaw: -0.89, amp: 0.9, period: 26, pitch: 0.22, range: 120 },
+  // Hill tower above the New Industries building: a tall tower whose lamp (~57 m) rakes the cellhouse
+  // roof and the north slope ("they crossed the roof in view of a gun tower").
+  { name: 'Hill Tower', tower: [-112, 31, 22], height: 26, yaw: -0.89, amp: 0.9, period: 26, pitch: 0.09, range: 130 },
   // Model Roof tower on the Model Industries building (north-west tip): sweeps the north-east shore.
-  { name: 'Model Roof Tower', tower: [-250, 10.5, 44], height: 4, yaw: -0.45, amp: 0.7, period: 21, pitch: 0.12, range: 140 },
+  { name: 'Model Roof Tower', tower: [-249.0, 16.3, 50.4], height: 4, yaw: -0.41, amp: 0.7, period: 21, pitch: 0.12, range: 140 },
   // Dock tower (OSM): faces the bay north of the dock.
   { name: 'Dock Tower', tower: [33.6, 1.0, -106.4], height: 11, yaw: 0.3, amp: 1.0, period: 30, pitch: 0.08, range: 160 },
 ];
@@ -336,9 +339,12 @@ export const LIGHT_ANCHORS: LightAnchor[] = [
   { p: [-29, F + 4.5, 0.45], color: 0xffe2b0, intensity: 14, distance: 14 },   // Times Square
   { p: [8, F + 3.0, 19.5], color: 0xffd9a0, intensity: 8, distance: 10 },       // library desk lamp
   { p: [29.8, F + 2.2, 0.4], color: 0xffd9a0, intensity: 8, distance: 9 },      // guard desk
+  { p: [-16.6, CEILING - 0.45, -7.3], color: 0xffbf73, intensity: 6, distance: 9 }, // workshop work lamp (top of B)
+  { p: [-13.3, FLOOR + 2.66, -6.0], color: 0xffd29a, intensity: 1.5, distance: 6 },  // utility corridor pilot bulb (climb)
+  { p: [-24.3, FLOOR + 2.66, -6.0], color: 0xffd29a, intensity: 1.5, distance: 6 },  // utility corridor pilot bulb (door)
   { p: [-78, 37.5, -17], color: 0xffa95a, intensity: 30, distance: 22 },        // service yard sodium lamp
   { p: [-150, 21, -36], color: 0xffa95a, intensity: 30, distance: 24 },         // road lamp
-  { p: [-200, 15, -40], color: 0xffa95a, intensity: 30, distance: 24 },         // power house lamp
+  { p: [-200.2, 16.0, -41.6], color: 0xffa95a, intensity: 30, distance: 24 },   // wall lamp on the Quartermaster's north wall
 ];
 
 /** Toward Angel Island (Point Blunt, bearing 7 deg, 2.8 km). Reaching TUNING.fogBankDistance from LAUNCH wins. */

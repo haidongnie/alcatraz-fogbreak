@@ -33,9 +33,9 @@ export function pickQuality(): Quality {
 export const TUNING = {
   player: {
     height: 1.78,
-    radius: 0.3,
-    walkSpeed: 2.6,
-    runSpeed: 5.2,
+    radius: 0.26,
+    walkSpeed: 1.8,
+    runSpeed: 4.6,
     crouchSpeed: 1.3,
     carrySpeedMul: 0.75,
     climbSpeed: 1.6,

@@ -95,6 +95,8 @@ export interface AvatarApi {
   play(anim: string, fade?: number): void;
   /** attach a carried item visual (null = remove). 'back' for bundles, 'hand' for small items */
   attach(obj: THREE.Object3D | null, where?: 'hand' | 'back'): void;
+  /** movement speed hint (m/s) so walk/run clips play at matching speed; null = clip default */
+  speed: number | null;
   update(dt: number): void;
   dispose(): void;
 }
@@ -137,6 +139,10 @@ export interface PlayerApi {
   setSeated(on: boolean, anchor?: THREE.Object3D): void;
   /** freeze input (menus, being caught) */
   setFrozen(on: boolean): void;
+  /** interactable id currently being held (published as PlayerNet.h for co-op progress), '' = none */
+  setHolding(id: string): void;
+  /** turn the body to face a world point (e.g. while working on something) */
+  face(x: number, z: number): void;
   /** current network snapshot of this player */
   snapshot(): PlayerNet;
 }

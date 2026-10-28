@@ -63,6 +63,7 @@ export class Session {
   spotted() {
     if (!this.net.isHost() || !this.world || this.world.phase !== 'playing') return;
     raiseAlarm(this.world, this.io);
+    this.io.fx({ k: 'toast', key: 'toast.spotted' });
     this.dirty = true;
   }
   /** Ask the host to do something (works on host and clients). */

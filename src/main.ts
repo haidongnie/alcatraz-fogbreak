@@ -144,10 +144,14 @@ session.setHooks({
 });
 bus.on('noise', (n) => session!.act({ k: 'noise', p: n.p, r: n.r }));
 ui.attach(ctx, session);
+// The systems above added lights/materials (guard flashlights, raft, items): compile them now,
+// not on the first game frame.
+try { await renderer.compileAsync(scene, camera); } catch (err) { console.warn('[main] shader warm-up failed', err); }
 
 // 6. Spawning and status changes of the local player.
 let player: LocalPlayer | null = null;
 let lastPhase: WorldState['phase'] | null = null;
+let catchPending = false;
 function mySlot(w: WorldState) { return w.players[ctx.myId]?.slot ?? 0; }
 function spawn(w: WorldState) {
   const slot = mySlot(w);
@@ -165,7 +169,7 @@ bus.on('world', (w) => {
   const me = w.players[ctx.myId];
   if (w.phase === 'playing' && me && (lastPhase !== 'playing' || !player)) spawn(w);
   lastPhase = w.phase;
-  player?.setFrozen(w.phase !== 'playing');
+  if (!catchPending) player?.setFrozen(w.phase !== 'playing');
 });
 bus.on('fx', (f) => {
   const w = ctx.world();
@@ -174,9 +178,11 @@ bus.on('fx', (f) => {
   if (f.k === 'caught' && f.pid === ctx.myId) {
     bus.emit('fade', { to: 1, duration: 0.4 });
     player.setFrozen(true);
+    catchPending = true;
     setTimeout(() => {
+      catchPending = false;
       player!.teleport(HOLE_CELLS[slot].inside, 0);
-      player!.setFrozen(false);
+      player!.setFrozen(ctx.world()?.phase !== 'playing');
       bus.emit('fade', { to: 0, duration: 0.8 });
     }, 1400);
   }
@@ -194,6 +200,10 @@ if (params.has('debug')) {
   (window as unknown as { fog: unknown }).fog = { ctx, session, net, guards, raft, items, player: () => player, THREE };
 }
 
+// Solo games really pause while the pause menu is open (online, the night goes on).
+let paused = false;
+bus.on('ui', (u) => { if (u === 'pause') paused = net.mode === 'offline'; if (u === 'resume') paused = false; });
+
 // 7. Frame loop.
 started = true;
 let publishAccum = 0;
@@ -202,6 +212,12 @@ renderer.setAnimationLoop(() => {
   timer.update();
   const dt = Math.min(timer.getDelta(), 0.1);
   input.poll();
+  if (paused) {
+    ui.update(dt);
+    atmosphere.render();
+    input.endFrame();
+    return;
+  }
   session!.update(dt);
 
   player?.preUpdate(dt);
