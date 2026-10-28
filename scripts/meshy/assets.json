@@ -6,90 +6,425 @@
     "texture_resolution": "2k",
     "textureSize": 1024
   },
-  "prisonerAnimations": [0, 30, 16, 524, 438, 276, 569, 187, 363, 262],
-  "guardAnimations": [0, 30, 16, 337, 2, 389, 341],
+  "prisonerAnimations": [
+    0,
+    30,
+    16,
+    524,
+    438,
+    276,
+    569,
+    187,
+    363,
+    262
+  ],
+  "guardAnimations": [
+    0,
+    30,
+    16,
+    337,
+    2,
+    389,
+    341
+  ],
   "animationNames": {
-    "0": "idle", "30": "walk", "16": "run", "524": "crouch", "438": "climb", "276": "pickup",
-    "569": "swim", "187": "knockdown", "363": "sit", "262": "work", "337": "torch_look",
-    "2": "alert", "389": "grab", "341": "patrol_look"
+    "0": "idle",
+    "30": "walk",
+    "16": "run",
+    "524": "crouch",
+    "438": "climb",
+    "276": "pickup",
+    "569": "swim",
+    "187": "knockdown",
+    "363": "sit",
+    "262": "work",
+    "337": "torch_look",
+    "2": "alert",
+    "389": "grab",
+    "341": "patrol_look"
   },
   "assets": [
-    { "id": "prisoner_a", "kind": "character", "role": "prisoner", "polycount": 12000, "height": 1.78,
-      "prompt": "Full body male prison inmate from 1962 Alcatraz, light blue chambray work shirt with buttons and breast pocket, dark blue denim work trousers, black leather work shoes, short cropped brown hair, clean shaven, lean build, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character" },
-    { "id": "prisoner_b", "kind": "character", "role": "prisoner", "polycount": 12000, "height": 1.74,
-      "prompt": "Full body older male prison inmate from 1962 Alcatraz, stocky build, grey short hair and grey stubble, light blue chambray shirt with rolled up sleeves, dark blue denim trousers, black boots, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character" },
-    { "id": "prisoner_c", "kind": "character", "role": "prisoner", "polycount": 12000, "height": 1.8,
-      "prompt": "Full body young male prison inmate from 1962, slicked back dark hair, plain white crew neck t-shirt, dark blue denim work trousers with turned up cuffs, black work shoes, wiry build, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character" },
-    { "id": "prisoner_d", "kind": "character", "role": "prisoner", "polycount": 12000, "height": 1.86,
-      "prompt": "Full body tall male prison inmate from 1962, dark navy knit watch cap, faded denim work jacket over light blue chambray shirt, dark denim trousers, black boots, short beard, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character" },
-    { "id": "guard", "kind": "character", "role": "guard", "polycount": 12000, "height": 1.82,
-      "prompt": "Full body 1962 United States federal prison correctional officer, dark grey wool uniform jacket with brass buttons and badge, white shirt and black tie, dark grey trousers, peaked officer cap with badge, black leather duty belt with key ring and wooden baton, polished black shoes, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character" },
-
-    { "id": "cell_bunk", "kind": "prop", "polycount": 4000, "fit": { "axis": "max", "size": 1.95 },
-      "prompt": "Narrow 1950s prison cell cot: welded steel bed frame painted grey, thin blue and white striped ticking mattress, grey wool blanket folded at the foot, flat white pillow, worn and realistic, game asset" },
-    { "id": "cell_toilet", "kind": "prop", "polycount": 2500, "fit": { "axis": "y", "size": 0.42 },
-      "prompt": "Old lidless white porcelain prison toilet bowl, 1950s institutional, slightly stained, chrome flush valve pipe at the back, realistic game asset" },
-    { "id": "cell_sink", "kind": "prop", "polycount": 2500, "fit": { "axis": "x", "size": 0.48 },
-      "prompt": "Small wall-mounted white porcelain hand sink with two old chrome faucet taps, 1950s institutional prison cell sink, chipped enamel, realistic game asset" },
-    { "id": "cell_table", "kind": "prop", "polycount": 3000, "fit": { "axis": "max", "size": 0.75 },
-      "prompt": "Fold-down steel wall desk with chains and a small steel shelf above it, chipped mint green paint, a tin cup and a few paperback books on it, 1950s prison cell furniture, realistic game asset" },
-    { "id": "dummy_head", "kind": "prop", "polycount": 3000, "fit": { "axis": "y", "size": 0.26 },
-      "prompt": "Handmade papier-mache decoy human head made of soap and toilet paper, painted flesh tone face with closed eyes, real brown human hair glued on top, crude prison escape dummy head, realistic game asset" },
-    { "id": "drill", "kind": "prop", "polycount": 3000, "fit": { "axis": "max", "size": 0.38 },
-      "prompt": "Improvised homemade electric drill built from a small vacuum cleaner motor, wrapped in black electrical tape with exposed copper wires and a bent metal bit, 1960s prison contraband, realistic game asset" },
-    { "id": "concertina", "kind": "prop", "polycount": 4000, "fit": { "axis": "max", "size": 0.36 },
-      "prompt": "Old hexagonal concertina squeezebox accordion with dark wooden ends, ivory buttons, red and black leather bellows, worn, realistic game asset" },
-    { "id": "raincoat_bundle", "kind": "prop", "polycount": 3000, "fit": { "axis": "max", "size": 0.6 },
-      "prompt": "Bundle of folded black rubberized prison raincoats tied together with twine, glossy rubber, realistic game asset" },
-    { "id": "raft", "kind": "prop", "polycount": 6000, "fit": { "axis": "max", "size": 2.6 },
-      "prompt": "Crude handmade inflatable escape raft made from dozens of black rubber raincoats stitched and glued together, rectangular with inflated tube pontoons, visible seams and patches, top view clear, realistic game asset" },
-    { "id": "paddle", "kind": "prop", "polycount": 2000, "fit": { "axis": "max", "size": 1.3 },
-      "prompt": "Crude handmade wooden paddle cut from plywood with a broom handle shaft attached by screws, rough edges, realistic game asset" },
-    { "id": "life_vest", "kind": "prop", "polycount": 3000, "fit": { "axis": "y", "size": 0.6 },
-      "prompt": "Improvised life vest made from black rubber raincoat sleeves inflated into tubes and tied with string, homemade, realistic game asset" },
-    { "id": "key_ring", "kind": "prop", "polycount": 2000, "fit": { "axis": "max", "size": 0.16 },
-      "prompt": "Large iron key ring with five old heavy brass prison skeleton keys, worn metal, realistic game asset" },
-
-    { "id": "dining_table", "kind": "prop", "polycount": 4000, "fit": { "axis": "max", "size": 2.6 },
-      "prompt": "1950s prison mess hall dining table, heavy wooden tabletop with steel legs and two long attached wooden benches, worn varnish, realistic game asset" },
-    { "id": "book_cart", "kind": "prop", "polycount": 4000, "fit": { "axis": "max", "size": 1.0 },
-      "prompt": "Old wooden library book cart on caster wheels loaded with worn hardcover books, 1950s institutional library, realistic game asset" },
-    { "id": "guard_desk", "kind": "prop", "polycount": 4000, "fit": { "axis": "max", "size": 1.5 },
-      "prompt": "1950s heavy oak office desk with a black rotary telephone, a desk lamp, a clipboard with count sheets and a coffee mug, realistic game asset" },
-    { "id": "wall_clock", "kind": "prop", "polycount": 1500, "fit": { "axis": "max", "size": 0.55 },
-      "prompt": "Vintage 1950s institutional round wall clock with black metal rim, white face and bold black numerals, realistic game asset" },
-    { "id": "mop_bucket", "kind": "prop", "polycount": 3000, "fit": { "axis": "y", "size": 0.95 },
-      "prompt": "Galvanized steel mop bucket on wheels with a wringer and a wooden handled cotton mop, 1950s janitor equipment, realistic game asset" },
-    { "id": "metal_locker", "kind": "prop", "polycount": 2500, "fit": { "axis": "y", "size": 1.8 },
-      "prompt": "Old olive green steel locker cabinet with vent slots, dents and scratches, 1950s, realistic game asset" },
-
-    { "id": "lighthouse", "kind": "landmark", "polycount": 20000, "fit": { "axis": "y", "size": 25.6 },
-      "prompt": "The 1909 Alcatraz Island lighthouse: tall slender tapered white reinforced concrete tower with a black iron lantern room and railed gallery on top, attached to a two-story white Mission Revival style keeper's house with a flat roof at its base, realistic game asset" },
-    { "id": "water_tower", "kind": "landmark", "polycount": 15000, "fit": { "axis": "y", "size": 28 },
-      "prompt": "Tall 1940s riveted steel water tower: cylindrical water tank with a shallow conical roof standing on six tall steel lattice legs with cross bracing, painted pale grey with rust streaks, realistic game asset" },
-    { "id": "guard_tower", "kind": "landmark", "polycount": 12000, "fit": { "axis": "y", "size": 11 },
-      "prompt": "1950s prison guard watchtower: tall square wooden and steel frame tower on stilts with diagonal bracing, enclosed glass windowed guard cabin on top with a catwalk railing, a ladder and a searchlight on the roof, realistic game asset" },
-    { "id": "searchlight", "kind": "prop", "polycount": 4000, "fit": { "axis": "y", "size": 1.3 },
-      "prompt": "Large vintage 1940s military carbon arc searchlight drum on a swivel yoke mount, olive drab paint, round glass front lens, realistic game asset" },
-    { "id": "patrol_boat", "kind": "landmark", "polycount": 12000, "fit": { "axis": "max", "size": 12 },
-      "prompt": "1960s US Bureau of Prisons wooden patrol motor launch boat, white hull with dark blue trim, small enclosed wheelhouse with windows, searchlight on top, realistic game asset" },
-    { "id": "crates", "kind": "prop", "polycount": 3000, "fit": { "axis": "y", "size": 1.3 },
-      "prompt": "Stack of three old weathered wooden shipping crates with stenciled lettering and metal corner brackets, realistic game asset" },
-    { "id": "oil_drums", "kind": "prop", "polycount": 3000, "fit": { "axis": "y", "size": 0.9 },
-      "prompt": "Group of three rusty dented steel oil drums barrels, faded red and black paint, realistic game asset" },
-    { "id": "shore_rocks", "kind": "prop", "polycount": 6000, "fit": { "axis": "max", "size": 6 },
-      "prompt": "Cluster of large dark grey wet coastal boulders and jagged sandstone rocks with patches of white bird guano and green algae, realistic game asset" },
-    { "id": "smokestack", "kind": "landmark", "polycount": 8000, "fit": { "axis": "y", "size": 30 },
-      "prompt": "Tall tapered red brick industrial power plant smokestack chimney with a concrete base and iron bands near the top, weathered soot stains, realistic game asset" },
-    { "id": "street_lamp", "kind": "prop", "polycount": 2500, "fit": { "axis": "y", "size": 4.2 },
-      "prompt": "1950s cast iron street lamp post with a single glass globe lantern on top, dark green paint, realistic game asset" },
-    { "id": "roof_ventilator", "kind": "prop", "polycount": 3000, "fit": { "axis": "y", "size": 1.6 },
-      "prompt": "Square galvanized steel rooftop ventilator housing with a hooded cap and iron bars over the opening, riveted, weathered, 1930s industrial building roof vent, realistic game asset" },
-    { "id": "pelican", "kind": "prop", "polycount": 4000, "fit": { "axis": "y", "size": 0.9 },
-      "prompt": "Brown pelican seabird standing on a rock, realistic feathers, long beak with throat pouch, realistic game asset" },
-    { "id": "warden_house", "kind": "landmark", "polycount": 20000, "fit": { "axis": "max", "size": 22 },
-      "prompt": "1920s three-story Mission Revival style mansion with white stucco walls, many tall rectangular windows, a red clay tile roof, an arched entry porch and a chimney, the warden's residence on a prison island, realistic game asset" },
-    { "id": "cypress_tree", "kind": "prop", "polycount": 8000, "fit": { "axis": "y", "size": 8 },
-      "prompt": "Wind-swept coastal Monterey cypress tree with a twisted trunk and flat dense dark green foliage canopy leaning to one side, realistic game asset" }
+    {
+      "id": "prisoner_a",
+      "kind": "character",
+      "role": "prisoner",
+      "polycount": 12000,
+      "height": 1.78,
+      "prompt": "Full body male prison inmate from 1962 Alcatraz, light blue chambray work shirt with buttons and breast pocket, dark blue denim work trousers, black leather work shoes, short cropped brown hair, clean shaven, lean build, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character"
+    },
+    {
+      "id": "prisoner_b",
+      "kind": "character",
+      "role": "prisoner",
+      "polycount": 12000,
+      "height": 1.74,
+      "prompt": "Full body older male prison inmate from 1962 Alcatraz, stocky build, grey short hair and grey stubble, light blue chambray shirt with rolled up sleeves, dark blue denim trousers, black boots, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character"
+    },
+    {
+      "id": "prisoner_c",
+      "kind": "character",
+      "role": "prisoner",
+      "polycount": 12000,
+      "height": 1.8,
+      "prompt": "Full body young male prison inmate from 1962, slicked back dark hair, plain white crew neck t-shirt, dark blue denim work trousers with turned up cuffs, black work shoes, wiry build, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character"
+    },
+    {
+      "id": "prisoner_d",
+      "kind": "character",
+      "role": "prisoner",
+      "polycount": 12000,
+      "height": 1.86,
+      "prompt": "Full body tall male prison inmate from 1962, dark navy knit watch cap, faded denim work jacket over light blue chambray shirt, dark denim trousers, black boots, short beard, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character"
+    },
+    {
+      "id": "guard",
+      "kind": "character",
+      "role": "guard",
+      "polycount": 12000,
+      "height": 1.82,
+      "prompt": "Full body 1962 United States federal prison correctional officer, dark grey wool uniform jacket with brass buttons and badge, white shirt and black tie, dark grey trousers, peaked officer cap with badge, black leather duty belt with key ring and wooden baton, polished black shoes, realistic proportions, standing in A-pose with arms away from body, facing forward, realistic game character"
+    },
+    {
+      "id": "cell_bunk",
+      "kind": "prop",
+      "polycount": 4000,
+      "fit": {
+        "axis": "max",
+        "size": 1.95
+      },
+      "prompt": "Narrow 1950s prison cell cot: welded steel bed frame painted grey, thin blue and white striped ticking mattress, grey wool blanket folded at the foot, flat white pillow, worn and realistic, game asset",
+      "simplify": 0.45
+    },
+    {
+      "id": "cell_toilet",
+      "kind": "prop",
+      "polycount": 2500,
+      "fit": {
+        "axis": "y",
+        "size": 0.42
+      },
+      "prompt": "Old lidless white porcelain prison toilet bowl, 1950s institutional, slightly stained, chrome flush valve pipe at the back, realistic game asset",
+      "simplify": 0.4
+    },
+    {
+      "id": "cell_sink",
+      "kind": "prop",
+      "polycount": 2500,
+      "fit": {
+        "axis": "x",
+        "size": 0.48
+      },
+      "prompt": "Small wall-mounted white porcelain hand sink with two old chrome faucet taps, 1950s institutional prison cell sink, chipped enamel, realistic game asset",
+      "simplify": 0.4
+    },
+    {
+      "id": "cell_table",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "max",
+        "size": 0.75
+      },
+      "prompt": "Fold-down steel wall desk with chains and a small steel shelf above it, chipped mint green paint, a tin cup and a few paperback books on it, 1950s prison cell furniture, realistic game asset",
+      "simplify": 0.4
+    },
+    {
+      "id": "dummy_head",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "y",
+        "size": 0.26
+      },
+      "prompt": "Handmade papier-mache decoy human head made of soap and toilet paper, painted flesh tone face with closed eyes, real brown human hair glued on top, crude prison escape dummy head, realistic game asset"
+    },
+    {
+      "id": "drill",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "max",
+        "size": 0.38
+      },
+      "prompt": "Improvised homemade electric drill built from a small vacuum cleaner motor, wrapped in black electrical tape with exposed copper wires and a bent metal bit, 1960s prison contraband, realistic game asset"
+    },
+    {
+      "id": "concertina",
+      "kind": "prop",
+      "polycount": 4000,
+      "fit": {
+        "axis": "max",
+        "size": 0.36
+      },
+      "prompt": "Old hexagonal concertina squeezebox accordion with dark wooden ends, ivory buttons, red and black leather bellows, worn, realistic game asset"
+    },
+    {
+      "id": "raincoat_bundle",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "max",
+        "size": 0.6
+      },
+      "prompt": "Bundle of folded black rubberized prison raincoats tied together with twine, glossy rubber, realistic game asset"
+    },
+    {
+      "id": "raft",
+      "kind": "prop",
+      "polycount": 6000,
+      "fit": {
+        "axis": "max",
+        "size": 2.6
+      },
+      "prompt": "Crude handmade inflatable escape raft made from dozens of black rubber raincoats stitched and glued together, rectangular with inflated tube pontoons, visible seams and patches, top view clear, realistic game asset"
+    },
+    {
+      "id": "paddle",
+      "kind": "prop",
+      "polycount": 2000,
+      "fit": {
+        "axis": "max",
+        "size": 1.3
+      },
+      "prompt": "Crude handmade wooden paddle cut from plywood with a broom handle shaft attached by screws, rough edges, realistic game asset"
+    },
+    {
+      "id": "life_vest",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "y",
+        "size": 0.6
+      },
+      "prompt": "Improvised life vest made from black rubber raincoat sleeves inflated into tubes and tied with string, homemade, realistic game asset"
+    },
+    {
+      "id": "key_ring",
+      "kind": "prop",
+      "polycount": 2000,
+      "fit": {
+        "axis": "max",
+        "size": 0.16
+      },
+      "prompt": "Large iron key ring with five old heavy brass prison skeleton keys, worn metal, realistic game asset"
+    },
+    {
+      "id": "dining_table",
+      "kind": "prop",
+      "polycount": 4000,
+      "fit": {
+        "axis": "max",
+        "size": 2.6
+      },
+      "prompt": "1950s prison mess hall dining table, heavy wooden tabletop with steel legs and two long attached wooden benches, worn varnish, realistic game asset",
+      "simplify": 0.5
+    },
+    {
+      "id": "book_cart",
+      "kind": "prop",
+      "polycount": 4000,
+      "fit": {
+        "axis": "max",
+        "size": 1.0
+      },
+      "prompt": "Old wooden library book cart on caster wheels loaded with worn hardcover books, 1950s institutional library, realistic game asset",
+      "simplify": 0.5
+    },
+    {
+      "id": "guard_desk",
+      "kind": "prop",
+      "polycount": 4000,
+      "fit": {
+        "axis": "max",
+        "size": 1.5
+      },
+      "prompt": "1950s heavy oak office desk with a black rotary telephone, a desk lamp, a clipboard with count sheets and a coffee mug, realistic game asset"
+    },
+    {
+      "id": "wall_clock",
+      "kind": "prop",
+      "polycount": 1500,
+      "fit": {
+        "axis": "max",
+        "size": 0.55
+      },
+      "prompt": "Vintage 1950s institutional round wall clock with black metal rim, white face and bold black numerals, realistic game asset"
+    },
+    {
+      "id": "mop_bucket",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "y",
+        "size": 0.95
+      },
+      "prompt": "Galvanized steel mop bucket on wheels with a wringer and a wooden handled cotton mop, 1950s janitor equipment, realistic game asset",
+      "simplify": 0.4
+    },
+    {
+      "id": "metal_locker",
+      "kind": "prop",
+      "polycount": 2500,
+      "fit": {
+        "axis": "y",
+        "size": 1.8
+      },
+      "prompt": "Old olive green steel locker cabinet with vent slots, dents and scratches, 1950s, realistic game asset",
+      "simplify": 0.5
+    },
+    {
+      "id": "lighthouse",
+      "kind": "landmark",
+      "polycount": 20000,
+      "fit": {
+        "axis": "y",
+        "size": 25.6
+      },
+      "prompt": "The 1909 Alcatraz Island lighthouse: tall slender tapered white reinforced concrete tower with a black iron lantern room and railed gallery on top, attached to a two-story white Mission Revival style keeper's house with a flat roof at its base, realistic game asset",
+      "simplify": 0.6
+    },
+    {
+      "id": "water_tower",
+      "kind": "landmark",
+      "polycount": 15000,
+      "fit": {
+        "axis": "y",
+        "size": 28
+      },
+      "prompt": "Tall 1940s riveted steel water tower: cylindrical water tank with a shallow conical roof standing on six tall steel lattice legs with cross bracing, painted pale grey with rust streaks, realistic game asset",
+      "simplify": 0.5
+    },
+    {
+      "id": "guard_tower",
+      "kind": "landmark",
+      "polycount": 12000,
+      "fit": {
+        "axis": "y",
+        "size": 11
+      },
+      "prompt": "1950s prison guard watchtower: tall square wooden and steel frame tower on stilts with diagonal bracing, enclosed glass windowed guard cabin on top with a catwalk railing, a ladder and a searchlight on the roof, realistic game asset",
+      "simplify": 0.6
+    },
+    {
+      "id": "searchlight",
+      "kind": "prop",
+      "polycount": 4000,
+      "fit": {
+        "axis": "y",
+        "size": 1.3
+      },
+      "prompt": "Large vintage 1940s military carbon arc searchlight drum on a swivel yoke mount, olive drab paint, round glass front lens, realistic game asset",
+      "simplify": 0.5
+    },
+    {
+      "id": "patrol_boat",
+      "kind": "landmark",
+      "polycount": 12000,
+      "fit": {
+        "axis": "max",
+        "size": 12
+      },
+      "prompt": "1960s US Bureau of Prisons wooden patrol motor launch boat, white hull with dark blue trim, small enclosed wheelhouse with windows, searchlight on top, realistic game asset",
+      "simplify": 0.6
+    },
+    {
+      "id": "crates",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "y",
+        "size": 1.3
+      },
+      "prompt": "Stack of three old weathered wooden shipping crates with stenciled lettering and metal corner brackets, realistic game asset",
+      "simplify": 0.3
+    },
+    {
+      "id": "oil_drums",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "y",
+        "size": 0.9
+      },
+      "prompt": "Group of three rusty dented steel oil drums barrels, faded red and black paint, realistic game asset",
+      "simplify": 0.3
+    },
+    {
+      "id": "shore_rocks",
+      "kind": "prop",
+      "polycount": 6000,
+      "fit": {
+        "axis": "max",
+        "size": 6
+      },
+      "prompt": "Cluster of large dark grey wet coastal boulders and jagged sandstone rocks with patches of white bird guano and green algae, realistic game asset",
+      "simplify": 0.12
+    },
+    {
+      "id": "smokestack",
+      "kind": "landmark",
+      "polycount": 8000,
+      "fit": {
+        "axis": "y",
+        "size": 30
+      },
+      "prompt": "Tall tapered red brick industrial power plant smokestack chimney with a concrete base and iron bands near the top, weathered soot stains, realistic game asset",
+      "simplify": 0.4
+    },
+    {
+      "id": "street_lamp",
+      "kind": "prop",
+      "polycount": 2500,
+      "fit": {
+        "axis": "y",
+        "size": 4.2
+      },
+      "prompt": "1950s cast iron street lamp post with a single glass globe lantern on top, dark green paint, realistic game asset",
+      "simplify": 0.35
+    },
+    {
+      "id": "roof_ventilator",
+      "kind": "prop",
+      "polycount": 3000,
+      "fit": {
+        "axis": "y",
+        "size": 1.6
+      },
+      "prompt": "Square galvanized steel rooftop ventilator housing with a hooded cap and iron bars over the opening, riveted, weathered, 1930s industrial building roof vent, realistic game asset",
+      "simplify": 0.4
+    },
+    {
+      "id": "pelican",
+      "kind": "prop",
+      "polycount": 4000,
+      "fit": {
+        "axis": "y",
+        "size": 0.9
+      },
+      "prompt": "Brown pelican seabird standing on a rock, realistic feathers, long beak with throat pouch, realistic game asset",
+      "simplify": 0.25
+    },
+    {
+      "id": "warden_house",
+      "kind": "landmark",
+      "polycount": 20000,
+      "fit": {
+        "axis": "max",
+        "size": 22
+      },
+      "prompt": "1920s three-story Mission Revival style mansion with white stucco walls, many tall rectangular windows, a red clay tile roof, an arched entry porch and a chimney, the warden's residence on a prison island, realistic game asset",
+      "simplify": 0.6
+    },
+    {
+      "id": "cypress_tree",
+      "kind": "prop",
+      "polycount": 8000,
+      "fit": {
+        "axis": "y",
+        "size": 8
+      },
+      "prompt": "Wind-swept coastal Monterey cypress tree with a twisted trunk and flat dense dark green foliage canopy leaning to one side, realistic game asset",
+      "simplify": 0.25
+    }
   ]
 }

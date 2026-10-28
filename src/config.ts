@@ -26,8 +26,8 @@ export function pickQuality(): Quality {
   const forced = params.get('q');
   const low = forced ? forced === 'low' : isTouch;
   return low
-    ? { tier: 'low', maxPixelRatio: 1.25, shadowMapSize: 1024, pointLights: 4, ao: false, bloom: false, aa: 'smaa', drawDistance: 220 }
-    : { tier: 'high', maxPixelRatio: 2, shadowMapSize: 2048, pointLights: 8, ao: true, bloom: true, aa: 'traa', drawDistance: 600 };
+    ? { tier: 'low', maxPixelRatio: 1.25, shadowMapSize: 1024, pointLights: 4, ao: false, bloom: false, aa: 'smaa', drawDistance: 150 }
+    : { tier: 'high', maxPixelRatio: 2, shadowMapSize: 2048, pointLights: 8, ao: true, bloom: true, aa: 'traa', drawDistance: 300 };
 }
 
 export const TUNING = {

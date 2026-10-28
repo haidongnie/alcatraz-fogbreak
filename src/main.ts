@@ -61,6 +61,18 @@ const ctx: Ctx = {
   player: null, items: null, avatars: new Map(),
 };
 
+/**
+ * Pre-compile shaders so the first frames don't stutter. Never let it block loading: WebGL's async
+ * compile polls once per animation frame, which a background tab or a slow GPU can stall.
+ */
+async function warmUp() {
+  try {
+    await Promise.race([renderer.compileAsync(scene, camera), new Promise((r) => setTimeout(r, 6000))]);
+  } catch (err) {
+    console.warn('[main] shader warm-up failed', err);
+  }
+}
+
 // 3. World.
 ctx.models = await Models.load(assets, (f) => ui.setLoading(0.05 + f * 0.45, t('loading.models')));
 ui.setLoading(0.52, t('loading.island'));
@@ -76,7 +88,7 @@ const exterior = new Exterior(ctx, island);
 await exterior.build();
 const searchlights = new Searchlights(ctx);
 ui.setLoading(0.9, t('loading.shaders'));
-try { await renderer.compileAsync(scene, camera); } catch (err) { console.warn('[main] shader warm-up failed', err); }
+await warmUp();
 ui.setLoading(1, t('loading.ready'));
 
 // Title-screen backdrop: slow orbit around the island until the player spawns.
@@ -146,7 +158,7 @@ bus.on('noise', (n) => session!.act({ k: 'noise', p: n.p, r: n.r }));
 ui.attach(ctx, session);
 // The systems above added lights/materials (guard flashlights, raft, items): compile them now,
 // not on the first game frame.
-try { await renderer.compileAsync(scene, camera); } catch (err) { console.warn('[main] shader warm-up failed', err); }
+await warmUp();
 
 // 6. Spawning and status changes of the local player.
 let player: LocalPlayer | null = null;

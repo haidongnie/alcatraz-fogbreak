@@ -182,7 +182,7 @@ export class Props {
 
   private lampVisuals(root: THREE.Object3D) {
     const m = materials();
-    if (this.lampMatrices.length) root.add(named(this.ctx.models.instanced('street_lamp', this.lampMatrices, { castShadow: true, receiveShadow: true }), 'street-lamps'));
+    if (this.lampMatrices.length) root.add(named(this.ctx.models.instanced('street_lamp', this.lampMatrices, { castShadow: false, receiveShadow: true }), 'street-lamps'));
     if (!this.globes.length) return;
     // emissive globes (instanced)
     const globeMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.34, 14, 10), m.globe, this.globes.length);
@@ -299,7 +299,9 @@ export class Props {
       const c = Math.cos(p.ry), s = Math.sin(p.ry);
       this.col.cylinder([p.x + (0.85 * c - 0.32 * s) * p.s, g + 1.5, p.z + (-0.85 * s - 0.32 * c) * p.s], 1.5, 0.3 * p.s);
     }
-    if (mats.length) root.add(named(this.ctx.models.instanced('cypress_tree', mats, { castShadow: true, receiveShadow: true }), 'cypress-trees'));
+    // island-wide instanced sets are one draw each: as shadow casters they would be drawn whole
+    // into the moon's shadow map every frame, so they only receive.
+    if (mats.length) root.add(named(this.ctx.models.instanced('cypress_tree', mats, { castShadow: false, receiveShadow: true }), 'cypress-trees'));
   }
 
   // ----------------------------------------------------------------------------------------------
@@ -344,7 +346,7 @@ export class Props {
       this.rocks.push({ p: new THREE.Vector3(x, y, z), s: sc, ry: this.rand() * Math.PI * 2 });
     }
     const mats = this.rocks.map((r) => new THREE.Matrix4().compose(r.p, new THREE.Quaternion().setFromAxisAngle(_up, r.ry), r.s));
-    if (mats.length) root.add(named(this.ctx.models.instanced('shore_rocks', mats, { castShadow: true, receiveShadow: true }), 'shore-rocks'));
+    if (mats.length) root.add(named(this.ctx.models.instanced('shore_rocks', mats, { castShadow: false, receiveShadow: true }), 'shore-rocks'));
 
     // a few brown pelicans roosting on the rocks
     const birds: THREE.Matrix4[] = [];

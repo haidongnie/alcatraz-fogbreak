@@ -5,7 +5,7 @@
 //   - characters: anim.glb (mesh + skeleton + all clips), clips renamed to game names
 //     (idle, walk, run, ...). Scale is applied at runtime from the skinned bounds.
 //   - every file: dedup + prune + keyframe resample, textures -> WebP (1024 px, 512 px for small
-//     props), meshopt geometry compression.
+//     props), meshopt geometry compression; props with a `simplify` ratio are decimated first.
 // Writes public/models/manifest.json describing what is available.
 //
 // usage: node scripts/meshy/optimize.mjs [--only id1,id2]
@@ -14,8 +14,8 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import { dedup, prune, resample, textureCompress, meshopt, getBounds } from '@gltf-transform/functions';
-import { MeshoptEncoder, MeshoptDecoder } from 'meshoptimizer';
+import { dedup, prune, resample, textureCompress, meshopt, getBounds, weld, simplify } from '@gltf-transform/functions';
+import { MeshoptEncoder, MeshoptDecoder, MeshoptSimplifier } from 'meshoptimizer';
 import sharp from 'sharp';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -27,6 +27,7 @@ const only = args.includes('--only') ? args[args.indexOf('--only') + 1].split(',
 
 await MeshoptEncoder.ready;
 await MeshoptDecoder.ready;
+await MeshoptSimplifier.ready;
 const io = new NodeIO()
   .registerExtensions(ALL_EXTENSIONS)
   .registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
@@ -75,8 +76,11 @@ for (const asset of manifest.assets) {
   }
 
   const texSize = asset.kind === 'prop' && (asset.fit?.size ?? 1) < 0.7 ? 512 : 1024;
+  // Environment props are seen many times and from afar: simplify them (assets.json `simplify`).
+  const reduce = asset.simplify ? [weld(), simplify({ simplifier: MeshoptSimplifier, ratio: asset.simplify, error: 0.02 })] : [];
   await doc.transform(
     dedup(),
+    ...reduce,
     prune(),
     resample(),
     textureCompress({ encoder: sharp, targetFormat: 'webp', resize: [texSize, texSize], quality: 82 }),
