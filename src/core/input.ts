@@ -12,6 +12,8 @@ export class Input {
   private readonly pressed = new Set<string>();
   private readonly released = new Set<string>();
   private readonly virtualDown = new Set<string>();
+  /** gamepad buttons, kept apart from touch buttons so neither overwrites the other */
+  private readonly padDown = new Set<string>();
   private readonly virtualAxis = { x: 0, y: 0 };
   /** Accumulated look movement (pixels) since the last `endFrame()`. */
   readonly look = { x: 0, y: 0 };
@@ -51,7 +53,7 @@ export class Input {
   get lookActive() { return this.locked || this.touchLook; }
   private touchLook = false;
 
-  isDown(code: string) { return this.down.has(code) || this.virtualDown.has(code); }
+  isDown(code: string) { return this.down.has(code) || this.virtualDown.has(code) || this.padDown.has(code); }
   /** True only during the frame the key went down. */
   wasPressed(code: string) { return this.pressed.has(code); }
   /** True only during the frame the key went up. */
@@ -85,11 +87,19 @@ export class Input {
 
   poll() {
     this.gamepad = navigator.getGamepads?.()[0] ?? null;
+    if (!this.gamepad && this.padDown.size) {
+      for (const code of this.padDown) this.released.add(code);
+      this.padDown.clear();
+    }
     if (this.gamepad) {
       const b = this.gamepad.buttons;
-      // A = interact, B = crouch, X = drop, LB = run
-      const map: [number, string][] = [[0, 'KeyE'], [1, 'KeyC'], [2, 'KeyG'], [4, 'ShiftLeft'], [3, 'Space']];
-      for (const [i, code] of map) this.setVirtualButton(code, !!b[i]?.pressed);
+      // A = interact, B = crouch, X = drop, LB = run, Y = jump
+      for (const [i, code] of PAD_MAP) {
+        const on = !!b[i]?.pressed;
+        const was = this.padDown.has(code);
+        if (on && !was) { this.padDown.add(code); this.pressed.add(code); }
+        else if (!on && was) { this.padDown.delete(code); if (!this.isDown(code)) this.released.add(code); }
+      }
       const ax = this.gamepad.axes;
       if (Math.abs(ax[2] ?? 0) > 0.15 || Math.abs(ax[3] ?? 0) > 0.15) {
         this.touchLook = true;
@@ -109,6 +119,8 @@ export class Input {
 
   dispose() { this.abort.abort(); }
 }
+
+const PAD_MAP: [number, string][] = [[0, 'KeyE'], [1, 'KeyC'], [2, 'KeyG'], [4, 'ShiftLeft'], [3, 'Space']];
 
 function isTyping(e: KeyboardEvent) {
   const t = e.target as HTMLElement | null;

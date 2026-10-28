@@ -237,17 +237,21 @@ export class Interaction {
       this.consider(c);
     }
 
-    // 3. climbs (utility pipes, bakery pipe)
+    // 3. climbs (utility pipes, bakery pipe) - never through a cell wall (the utility pipes run
+    // right behind B-152's partition)
+    const inCell = zoneAt(this.feet.x, this.feet.y + 0.1, this.feet.z) === 'cell';
     for (let i = 0; i < CLIMBS.length; i++) {
       const cl = CLIMBS[i];
+      if (inCell) break;
       if (cl.requires && !w.flags[cl.requires]) continue;
       const sBottom = Math.min(this.score(cl.bottom, CLIMB_RADIUS, -1.0, 1.2, false), this.score(cl.exitBottom, CLIMB_RADIUS, -1.0, 1.2, false));
       const sTop = Math.min(this.score(cl.top, CLIMB_RADIUS, -1.0, 1.2, false), this.score(cl.exitTop, CLIMB_RADIUS, -1.0, 1.2, false));
       if (sBottom === Infinity && sTop === Infinity) continue;
       const fromTop = sTop < sBottom;
-      // Bundles can't be climbed with. Going down a climb that has a drop point (the bakery pipe)
-      // sends the bundle down first; any other climb would strand it, so it is refused.
-      if (heavy && (!fromTop || !cl.dropHeavyTo)) { this.offerHint('prompt.handsFull', '', Math.min(sTop, sBottom)); continue; }
+      // Going down a climb that has a drop point (the bakery pipe) sends the bundle down first and
+      // the bakery pipe can't be climbed up with one. Other climbs (the utility pipes) are fine with
+      // a bundle in either direction, so one that fell into the corridor can always be brought back.
+      if (heavy && cl.dropHeavyTo && !fromTop) { this.offerHint('prompt.handsFull', '', Math.min(sTop, sBottom)); continue; }
       const id = fromTop ? this.climbIdDown[i] : this.climbIdUp[i];
       if (suppressing && id === this.suppressId) continue;
       c.kind = 'climb';

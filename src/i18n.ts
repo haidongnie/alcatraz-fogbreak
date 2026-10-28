@@ -21,6 +21,7 @@ const zh = {
   'loading.shaders': '正在编译着色器（首次较慢）……',
   'loading.ready': '雾已漫上来了。',
   'net.failed': '无法接通联机服务，已改为单人行动。',
+  'net.startFailed': '启动出错，请刷新页面重试：',
 
   // interaction prompts (verb phrases; the HUD adds the key cap and the hold ring)
   'prompt.dummy': '把假人头放进铺位',
@@ -110,6 +111,8 @@ const zh = {
   'lost.lockdown.text': '警报声响彻全岛。所有探照灯同时亮起，每一扇牢门都落了锁，巡逻艇封住了海湾。今夜的计划到此为止。',
   'lost.allCaught': '全员落网',
   'lost.allCaught.text': '最后一个人也被押进了D区禁闭室。第二天一早，狱警在B区顶上找到了工坊和那只没来得及下水的雨衣筏。',
+  'lost.adrift': '无人掌桨',
+  'lost.adrift.text': '木筏上的人都断了联络。空筏在退潮里打着转，漂向金门。',
 
   // zones and areas
   'zone.cell': '牢房',
@@ -349,6 +352,7 @@ const en: Record<Key, string> = {
   'loading.shaders': 'Compiling shaders (slow the first time)…',
   'loading.ready': 'The fog is coming in.',
   'net.failed': 'Could not reach the online service — playing solo.',
+  'net.startFailed': 'Something went wrong while starting — please reload:',
 
   'prompt.dummy': 'Put the dummy head in your bunk',
   'prompt.vent': 'Pry off the vent grille (noisy)',
@@ -433,6 +437,8 @@ const en: Record<Key, string> = {
   'lost.lockdown.text': 'Sirens across the island. Every searchlight burns at once, every cell is locked, the patrol boat seals the bay. The plan is over — for tonight.',
   'lost.allCaught': 'Everyone Caught',
   'lost.allCaught.text': 'The last of you is marched into D-Block. In the morning the officers find the workshop on top of B-Block, and a raincoat raft that never touched the water.',
+  'lost.adrift': 'Nobody at the Paddles',
+  'lost.adrift.text': 'Everyone aboard has lost contact. The empty raft turns slowly in the ebb, drifting toward the Golden Gate.',
 
   'zone.cell': 'Cell',
   'zone.utility': 'Utility corridor',

@@ -24,7 +24,7 @@ export const ADMIN_ROOF = FLOOR + 10;
 
 const WALL_BOTTOM = 25;
 const PARAPET = 0.75;       // visible parapet height above a roof
-const PARAPET_COL = 1.0;    // collider height (taller than a jump: 0.9 m)
+const PARAPET_COL = 1.5;    // collider height: above jump (0.9 m) + mid-air autostep (0.37 m)
 
 /** Main roof rectangles (CELLHOUSE_POLY decomposed). */
 export const MAIN_RECTS: Rect[] = [[-32.5, -14.24, 15.5, 24.61], [15.5, -24.6, 32.5, 13.55], [-15.4, -24.6, 15.5, -14.24]];

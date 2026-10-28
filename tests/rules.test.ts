@@ -134,5 +134,32 @@ at('L', PLAYER_CELLS[1].spawn);
 hostTick(w4, 1, io, 0);
 check(w4.players.L?.slot === 1 && w4.players.L.s === 'free', 'late joiner gets slot 1');
 
+console.log('leaving players: items released, slots reclaimed, adrift');
+{
+  const lp: Record<string, V3> = {};
+  const io2: HostIO = { fx: () => {}, playerState: (pid) => states[pid] ?? null, connected: () => connected, lastPos: (pid) => lp[pid] };
+  connected = ['A', 'B', 'C', 'D'];
+  const w5 = createWorld();
+  hostApply(w5, { k: 'start' }, 'A', 0, io2);
+  w5.items.bundle_raft.by = 'B'; lp.B = [-60, 49.5, -6];
+  w5.items.drill.by = 'C'; lp.C = [5, 41, 0.4];
+  connected = ['A', 'C', 'D'];
+  hostTick(w5, 1, io2, 0);
+  check(w5.items.bundle_raft.by === '' && w5.items.bundle_raft.p[0] === -60, 'bundle of a leaver dropped where they were');
+  connected = ['A', 'D'];
+  hostTick(w5, 2, io2, 0);
+  check(w5.items.drill.by === '' && w5.items.drill.p[0] === ITEM_SPAWNS.drill[0], 'drill of a leaver goes back to the cart (roof vent not open)');
+  connected = ['A', 'D', 'E', 'F'];
+  hostTick(w5, 3, io2, 0);
+  check(!!w5.players.E && !!w5.players.F && Object.keys(w5.players).length === 4, 'full room: slots of leavers reclaimed');
+  w5.raft.launched = 1; w5.players.A.s = 'aboard';
+  connected = ['A', 'D', 'E', 'F', 'G'];
+  hostTick(w5, 4, io2, 0);
+  check(!w5.players.G || w5.players.G.s === 'left_behind', 'joiner after launch cannot play');
+  connected = ['D', 'E'];
+  hostTick(w5, 5, io2, 0);
+  check(w5.phase === 'lost' && w5.lostReason === 'lost.adrift', 'crew all gone after launch -> adrift');
+}
+
 console.log(failures ? `\n${failures} FAILED` : '\nall rules tests passed');
 process.exit(failures ? 1 : 0);

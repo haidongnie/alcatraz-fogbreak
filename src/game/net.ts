@@ -46,6 +46,8 @@ export interface Net {
   /** host -> everyone (including the host itself) */
   fx(f: Fx): void;
   onFx(cb: (f: Fx) => void): void;
+  /** host only: pass the host role to another connected player; false if there is nobody */
+  handOffHost(): boolean;
 }
 
 const NAME_KEY = 'fogbreak.name';
@@ -86,6 +88,7 @@ export class LocalNet implements Net {
   onAction(cb: (a: Action, from: string) => void) { this.actionCbs.push(cb); }
   fx(f: Fx) { for (const cb of this.fxCbs) cb(f); }
   onFx(cb: (f: Fx) => void) { this.fxCbs.push(cb); }
+  handOffHost() { return false; }
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -177,4 +180,11 @@ export class PlayroomNet implements Net {
     void this.pk.RPC.call('fx', f, this.pk.RPC.Mode.OTHERS);
   }
   onFx(cb: (f: Fx) => void) { this.fxCbs.push(cb); }
+  handOffHost() {
+    if (!this.pk.isHost()) return false;
+    const other = [...this.roster.keys()].find((id) => id !== this.myId);
+    if (!other) return false;
+    void this.pk.transferHost(other);
+    return true;
+  }
 }

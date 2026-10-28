@@ -7,7 +7,7 @@
 // shadows the launch site from the Model Roof Tower). At alarm >= 2 the operators sweep faster.
 // Lights are created here, once, before the shader warm-up in main.ts.
 import * as THREE from 'three/webgpu';
-import { SEARCHLIGHTS, type SearchlightDef } from '../../world/layout';
+import { zoneAt, SEARCHLIGHTS, type SearchlightDef } from '../../world/layout';
 import type { Ctx } from '../context';
 import { Beacon } from './Beacon';
 import { syncBeamFog } from './beams';
@@ -29,6 +29,8 @@ interface Tower {
   holder: THREE.Group;
   beacon: Beacon;
 }
+
+const INDOOR_ZONES = new Set(['cell', 'utility', 'workshop', 'floor', 'dblock']);
 
 export class Searchlights {
   private readonly q: WorldQueries;
@@ -79,6 +81,11 @@ export class Searchlights {
       tw.beacon.refresh(this.q, cam);
     }
     this.boat.update(t, this.q, cam);
+    // Unshadowed spots would light the cellhouse interior straight through its walls. Lighting is
+    // per client, so while this camera is indoors the towers and the boat only show their beams.
+    const indoors = INDOOR_ZONES.has(zoneAt(cam.x, cam.y, cam.z));
+    for (const tw of this.towers) tw.beacon.spot.intensity = indoors ? 0 : tw.beacon.o.intensity;
+    this.boat.beacon.spot.intensity = indoors ? 0 : this.boat.beacon.o.intensity;
   }
 
   /** 0..1 how strongly a point is inside a searchlight beam (with occlusion) */

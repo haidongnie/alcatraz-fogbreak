@@ -267,7 +267,12 @@ export class Hud {
       this.alarmShown = w.alarm;
       for (let i = 0; i < 3; i++) this.pips[i].classList.toggle('on', i < w.alarm);
     }
-    // where to go next
+    this.updateTarget(w);
+  }
+
+  /** Where to go next. Position-dependent (the descent follows the route), so also run at 4 Hz. */
+  private updateTarget(w: WorldState) {
+    const me = w.players[this.ctx.myId];
     if (w.phase !== 'playing' || !me) this.target = null;
     else if (me.s === 'aboard') this.target = FOG_TARGET;
     else if (me.s !== 'free') this.target = null;
@@ -275,7 +280,7 @@ export class Hud {
     else {
       const pl = this.ctx.player;
       if (pl) { this.fromTmp[0] = pl.position.x; this.fromTmp[1] = pl.position.y; this.fromTmp[2] = pl.position.z; }
-      this.target = objectiveTarget(w, myId, pl ? this.fromTmp : undefined);
+      this.target = objectiveTarget(w, this.ctx.myId, pl ? this.fromTmp : undefined);
     }
     const key = me?.s === 'aboard' ? 'hud.fogBank' : '';
     if (key !== this.targetKey) { this.targetKey = key; this.markerLabel.set(key ? t(key) : ''); }
@@ -439,6 +444,7 @@ export class Hud {
 
   /** 4 Hz: clock, count, zone, banners, vignette. */
   private tickSlow(w: WorldState | null) {
+    if (w) this.updateTarget(w);
     const ctx = this.ctx;
     const now = ctx.time();
     const playing = !!w && w.phase === 'playing';

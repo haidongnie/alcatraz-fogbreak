@@ -35,12 +35,15 @@ export class Session {
   private wasHost = false;
   private hooks: SessionHooks | null = null;
   private readonly io: HostIO;
+  /** last known feet position per player (kept after they leave, for releasing what they carried) */
+  private readonly lastPos = new Map<string, [number, number, number]>();
 
   constructor(private readonly net: Net, private readonly bus: Bus) {
     this.io = {
       fx: (f) => this.net.fx(f),
       playerState: (pid) => this.net.getPlayerState(pid),
       connected: () => this.net.players().map((p) => p.id),
+      lastPos: (pid) => this.lastPos.get(pid),
     };
     net.onAction((a, from) => this.onAction(a, from));
     net.onFx((f) => bus.emit('fx', f));
@@ -77,7 +80,13 @@ export class Session {
   }
 
   update(dt: number) {
+    // remember where everyone is (every client does this, so a new host has it after a migration)
+    for (const p of this.net.players()) {
+      const s = this.net.getPlayerState(p.id);
+      if (s) this.lastPos.set(p.id, s.p);
+    }
     const host = this.net.isHost();
+    if (host !== this.wasHost) this.lastSeenVersion = -1; // host-dependent screens re-read the world
     if (host && !this.wasHost) this.becomeHost();
     this.wasHost = host;
 
@@ -126,6 +135,8 @@ export class Session {
     const a = this.net.getActors();
     if (a) { this.clock = Math.max(this.clock, a.t); this.actors = a; }
     if (!existing) this.dirty = true;
+    // re-emit the world once so screens that depend on being host (end screen, lobby) refresh
+    this.lastSeenVersion = -1;
   }
 }
 

@@ -80,8 +80,12 @@ export class GuardView {
       torch.position.set(FLASH.offset[0], FLASH.offset[1], FLASH.offset[2]);
       const spot = new THREE.SpotLight(FLASH.color, 0, FLASH.range, FLASH.angle, FLASH.penumbra, 2);
       spot.castShadow = false;
-      spot.target.position.set(0, 0, -1);
-      torch.add(spot, spot.target);
+      // The light lives directly in the scene, never under a node that gets hidden: an invisible
+      // light drops out of the renderer's light list, which changes every lit material's cache key
+      // and recompiles them all. Distant/inactive guards only set intensity 0 (see render/hide).
+      spot.position.set(0, -500, 0);
+      spot.target.position.set(0, -501, 0);
+      ctx.scene.add(spot, spot.target);
       const beam = createBeam({ color: FLASH.color, strength: 0.16, angle: FLASH.angle * 0.8, falloff: 1.8 });
       beam.setLength(FLASH.beamLength);
       torch.add(beam.mesh);
@@ -182,6 +186,8 @@ export class GuardView {
     if (this.torch && this.spot && this.beam && this.glare) {
       this.torch.rotation.set(-this.aim.pitch, this.aim.yaw, 0);
       this.spot.intensity = st.flash ? FLASH.intensity : 0;
+      this.spot.position.copy(this.torchPos);
+      this.spot.target.position.copy(this.torchPos).add(this.torchDir);
       this.beam.intensity.value = st.flash ? 1 : 0;
       this.beam.mesh.visible = st.flash;
       // lens glare: a dot from the side, a blinding disc when the torch points at the camera
@@ -257,6 +263,7 @@ export class GuardView {
     if (this.beam) (this.beam.mesh.material as THREE.Material).dispose();
     if (this.glare) this.glare.material.dispose();
     this.markerMat.dispose();
+    if (this.spot) this.ctx.scene.remove(this.spot, this.spot.target);
     this.spot?.dispose();
   }
 }

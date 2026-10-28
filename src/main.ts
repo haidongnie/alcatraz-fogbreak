@@ -10,8 +10,9 @@ import { initI18n, t } from './i18n';
 import { Bus, type Ctx } from './game/context';
 import { LocalNet, PlayroomNet, type Net } from './game/net';
 import { Session } from './game/session';
-import { CHARACTER_IDS, type WorldState } from './game/types';
-import { HOLE_CELLS, PLAYER_CELLS } from './world/layout';
+import { CHARACTER_IDS, type V3, type WorldState } from './game/types';
+import { carriedBy } from './game/rules';
+import { HOLE_CELLS, ITEM_SPAWNS, PLAYER_CELLS } from './world/layout';
 import { Models } from './world/models';
 import { Island } from './world/island';
 import { Exterior } from './world/exterior';
@@ -31,6 +32,15 @@ import { UI } from './ui/ui';
 const lang = initI18n();
 const bus = new Bus();
 const ui = new UI(bus);
+// Anything that breaks during startup should be visible, not a title screen stuck on "loading".
+const showFatal = (err: unknown) => {
+  console.error(err);
+  ui.toast(`${t('net.startFailed')} ${String((err as Error)?.message ?? err).slice(0, 140)}`);
+};
+const onRejection = (e: PromiseRejectionEvent) => showFatal(e.reason);
+const onError = (e: ErrorEvent) => showFatal(e.error ?? e.message);
+addEventListener('unhandledrejection', onRejection);
+addEventListener('error', onError);
 const quality = pickQuality();
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
 
@@ -163,7 +173,10 @@ await warmUp();
 // 6. Spawning and status changes of the local player.
 let player: LocalPlayer | null = null;
 let lastPhase: WorldState['phase'] | null = null;
+let lastStatus: string | undefined;
 let catchPending = false;
+let freedByTeammate = false;
+let warmedAfterSpawn = false;
 function mySlot(w: WorldState) { return w.players[ctx.myId]?.slot ?? 0; }
 function spawn(w: WorldState) {
   const slot = mySlot(w);
@@ -176,34 +189,66 @@ function spawn(w: WorldState) {
   } else {
     player.teleport(at, cell.spawnRy);
   }
+  // Rejoining mid-night while the world still says I carry something: I respawn in my cell, where a
+  // bundle could never leave (no crawling with it), so put the item back at its spawn point.
+  const carried = carriedBy(w, ctx.myId);
+  if (carried && st === 'free') session!.act({ k: 'drop', item: carried, p: [...ITEM_SPAWNS[carried]] as V3 });
+  // the first gameplay frames reveal objects the title-screen warm-up never saw
+  if (!warmedAfterSpawn) { warmedAfterSpawn = true; void warmUp(); }
 }
-bus.on('world', (w) => {
-  const me = w.players[ctx.myId];
-  if (w.phase === 'playing' && me && (lastPhase !== 'playing' || !player)) spawn(w);
-  lastPhase = w.phase;
-  if (!catchPending) player?.setFrozen(w.phase !== 'playing');
-});
-bus.on('fx', (f) => {
-  const w = ctx.world();
-  if (!w || !player) return;
+/** One pending status move at a time: a newer status change replaces an older, unfinished one. */
+let moveTimer = 0;
+function scheduleMove(ms: number, fn: () => void) {
+  clearTimeout(moveTimer);
+  moveTimer = window.setTimeout(fn, ms);
+}
+/** Moves the local player when the host changes their status (driven by world state, so a missed fx can't strand anyone). */
+function onStatusChange(w: WorldState, prev: string | undefined, now: string | undefined) {
+  if (!player || prev === now) return;
   const slot = mySlot(w);
-  if (f.k === 'caught' && f.pid === ctx.myId) {
+  if (now === 'hole') {
     bus.emit('fade', { to: 1, duration: 0.4 });
     player.setFrozen(true);
     catchPending = true;
-    setTimeout(() => {
+    scheduleMove(1400, () => {
       catchPending = false;
       player!.teleport(HOLE_CELLS[slot].inside, 0);
       player!.setFrozen(ctx.world()?.phase !== 'playing');
       bus.emit('fade', { to: 0, duration: 0.8 });
-    }, 1400);
-  }
-  if (f.k === 'freed' && f.pid === ctx.myId && !f.by) {
+    });
+  } else if (prev === 'hole' && now === 'free') {
+    // freed by a teammate with the keys: step out of the opened cell; released: back to my own cell
+    const byMate = freedByTeammate;
+    freedByTeammate = false;
     bus.emit('fade', { to: 1, duration: 0.3 });
-    setTimeout(() => {
-      player!.teleport(PLAYER_CELLS[slot].spawn, PLAYER_CELLS[slot].spawnRy);
+    scheduleMove(400, () => {
+      catchPending = false;
+      if (byMate) player!.teleport(HOLE_CELLS[slot].door, 0);
+      else player!.teleport(PLAYER_CELLS[slot].spawn, PLAYER_CELLS[slot].spawnRy);
+      player!.setFrozen(ctx.world()?.phase !== 'playing');
       bus.emit('fade', { to: 0, duration: 0.8 });
-    }, 500);
+    });
+  }
+}
+bus.on('world', (w) => {
+  const me = w.players[ctx.myId];
+  if (w.phase === 'playing' && me && (lastPhase !== 'playing' || !player)) spawn(w);
+  else if (w.phase === 'playing') onStatusChange(w, lastStatus, me?.s);
+  lastStatus = me?.s;
+  lastPhase = w.phase;
+  if (!catchPending) player?.setFrozen(w.phase !== 'playing');
+});
+bus.on('fx', (f) => {
+  if (f.k === 'freed' && f.pid === ctx.myId) freedByTeammate = !!f.by;
+});
+
+// Online host whose tab is hidden: browsers stop requestAnimationFrame, which would freeze the night
+// for everyone (guards, clock, raft). Hand the host role to another player after a short grace.
+let handOffTimer = 0;
+document.addEventListener('visibilitychange', () => {
+  clearTimeout(handOffTimer);
+  if (document.hidden && net.mode === 'online') {
+    handOffTimer = window.setTimeout(() => { if (document.hidden && net.isHost()) net.handOffHost(); }, 3000);
   }
 });
 
@@ -216,8 +261,10 @@ if (params.has('debug')) {
 let paused = false;
 bus.on('ui', (u) => { if (u === 'pause') paused = net.mode === 'offline'; if (u === 'resume') paused = false; });
 
-// 7. Frame loop.
+// 7. Frame loop. From here on errors are logged, not shown as a startup failure.
 started = true;
+removeEventListener('unhandledrejection', onRejection);
+removeEventListener('error', onError);
 let publishAccum = 0;
 function frame(dt: number, render = true) {
   input.poll();

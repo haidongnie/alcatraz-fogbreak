@@ -43,8 +43,11 @@ export function createWorld(): WorldState {
   };
 }
 
-/** Gives a joining player the lowest free slot. Returns false when all 4 slots are taken. */
-export function addPlayer(w: WorldState, pid: string): boolean {
+/**
+ * Gives a joining player the lowest free slot. When all 4 slots are taken and `connected` is given,
+ * the slot of a player who has left the room is reclaimed. Returns false when no slot is available.
+ */
+export function addPlayer(w: WorldState, pid: string, connected?: Set<string>): boolean {
   if (w.players[pid]) return true;
   const used = new Set(Object.values(w.players).map((p) => p.slot));
   for (let slot = 0; slot < 4; slot++) {
@@ -53,7 +56,36 @@ export function addPlayer(w: WorldState, pid: string): boolean {
       return true;
     }
   }
+  if (connected) {
+    const gone = Object.keys(w.players).find((id) => !connected.has(id));
+    if (gone) {
+      const slot = w.players[gone].slot;
+      delete w.players[gone];
+      w.players[pid] = { s: 'free', slot, caught: 0 };
+      return true;
+    }
+  }
   return false;
+}
+
+/**
+ * Items carried by players who left the room are put back into the world (at the carrier's last
+ * known position, or their spawn point when that spot is unreachable), so nobody can walk off
+ * with the drill or a raft bundle and softlock the night.
+ */
+export function releaseOrphanedItems(w: WorldState, connected: Set<string>, lastPos: (pid: string) => V3 | undefined): boolean {
+  let changed = false;
+  for (const id of ITEM_IDS) {
+    const it = w.items[id];
+    if (it.by === '' || it.by === NOT_IN_PLAY || connected.has(it.by)) continue;
+    const p = lastPos(it.by);
+    const z = p ? zoneAt(p[0], p[1], p[2]) : 'outside';
+    const usable = p && p[1] > -0.5 && z !== 'cell' && z !== 'dblock' && !(id === 'drill' && !w.flags.roof_vent);
+    it.by = '';
+    it.p = usable ? [...p] as V3 : [...ITEM_SPAWNS[id]] as V3;
+    changed = true;
+  }
+  return changed;
 }
 
 /** Briefing -> night. `connected` = ids currently in the room. */
@@ -171,6 +203,8 @@ export interface HostIO {
   playerState(pid: string): PlayerNet | null;
   /** currently connected player ids */
   connected(): string[];
+  /** last known feet position of a player (also for players who just left) */
+  lastPos?(pid: string): V3 | undefined;
 }
 
 /** Applies a client request. Returns true when the world changed (caller publishes it). */
@@ -330,8 +364,16 @@ export function hostTick(w: WorldState, t: number, io: HostIO, raftDist: number)
   let changed = false;
   const connected = io.connected().filter((pid) => w.players[pid]);
 
-  // late joiners get a slot
-  for (const pid of io.connected()) if (!w.players[pid] && addPlayer(w, pid)) changed = true;
+  // late joiners get a slot (reclaiming one from a player who left if the room is full); after
+  // the raft has gone they can only watch
+  const connectedSet = new Set(io.connected());
+  for (const pid of connectedSet) {
+    if (w.players[pid] || !addPlayer(w, pid, connectedSet)) continue;
+    const roster = w.players;
+    if (w.raft.launched) roster[pid].s = 'left_behind';
+    changed = true;
+  }
+  if (releaseOrphanedItems(w, connectedSet, (pid) => io.lastPos?.(pid))) changed = true;
 
   // zone-driven flags
   for (const pid of connected) {
@@ -400,6 +442,8 @@ export function hostTick(w: WorldState, t: number, io: HostIO, raftDist: number)
 
   // lose conditions
   if (w.alarm >= 3) return lose(w, t, 'lost.lockdown', io);
+  // the raft is out but its whole crew has left the room: nobody can finish the night
+  if (w.raft.launched && !connected.some((pid) => w.players[pid].s === 'aboard')) return lose(w, t, 'lost.adrift', io);
   const active = connected.map((pid) => w.players[pid]);
   // A team wipe needs a team: solo, a catch costs time and an alarm level instead.
   if (active.length > 1 && active.every((s) => s.s === 'hole')) return lose(w, t, 'lost.allCaught', io);
